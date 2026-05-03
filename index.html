@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Java Backend Developer Portfolio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="portfolio-slide-app" aria-label="Java Backend Developer Portfolio">
+      <section class="portfolio-slide-stage" aria-live="polite">
+        <article id="slide" class="portfolio-slide-card"></article>
+      </section>
+
+      <nav class="portfolio-slide-controls" aria-label="슬라이드 이동">
+        <button id="prevSlide" class="portfolio-slide-nav-button" type="button" aria-label="이전 슬라이드">
+          <span aria-hidden="true">‹</span>
+        </button>
+        <div class="portfolio-slide-status" aria-label="현재 슬라이드">
+          <strong id="currentSlide">01</strong>
+          <span>/</span>
+          <span id="totalSlides">10</span>
+        </div>
+        <button id="nextSlide" class="portfolio-slide-nav-button" type="button" aria-label="다음 슬라이드">
+          <span aria-hidden="true">›</span>
+        </button>
+      </nav>
+
+      <div id="slideDots" class="portfolio-slide-dots" aria-label="슬라이드 진행 표시"></div>
+    </main>
+
+    <script src="slides.js"></script>
+  </body>
+</html>
