@@ -190,7 +190,7 @@ const slides = [
   {
     chapter: "Thank You",
     title: "Thank You.",
-    subtitle: "Java Java Backend Developer 송다원",
+    subtitle: "Java Backend Developer 송다원",
     label: "Thank You",
     variant: "thanks",
     content: {
