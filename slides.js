@@ -18,29 +18,32 @@ const slides = [
     }
   },
   {
-    chapter: "Profile Summary",
-    title: "Profile Summary",
-    subtitle: "서비스 구현, 데이터 처리, 외부 연동을 운영 관점으로 연결합니다.",
-    label: "Summary",
+    chapter: "Profile Dashboard",
+    title: "Backend Capability Snapshot",
+    subtitle: "운영 기능 구현, 데이터 처리, 외부 연동 경험을 백엔드 업무 흐름 기준으로 정리했습니다.",
+    label: "Capability",
     content: {
-      type: "cards",
+      type: "dashboard",
+      metrics: [
+        { value: "Java", label: "Primary Language" },
+        { value: "Spring", label: "Backend Framework" },
+        { value: "MyBatis", label: "Persistence Layer" },
+        { value: "Oracle / MySQL", label: "Database" }
+      ],
       cards: [
         {
-          title: "Backend Development",
-          accent: "blue",
-          text: "Java 기반 REST API와 서비스 로직을 구현하고 예외 흐름까지 고려합니다.",
+          title: "Service Logic",
+          text: "요청 검증, 서비스 로직, 응답 흐름을 계층별로 분리해 구현합니다.",
           tags: ["Controller", "Service", "Validation"]
         },
         {
-          title: "Database & Query",
-          accent: "mint",
-          text: "MySQL/MyBatis 기반 CRUD, 검색, 페이징 쿼리를 요구사항에 맞게 작성합니다.",
-          tags: ["MySQL", "MyBatis", "CRUD"]
+          title: "Operation Data",
+          text: "CRUD, 검색, 페이징, 결과 산출처럼 운영자가 반복적으로 사용하는 데이터 흐름을 만듭니다.",
+          tags: ["CRUD", "Search", "Pagination"]
         },
         {
-          title: "Integration & Operation",
-          accent: "pink",
-          text: "결제, OAuth, 리포트 출력 등 외부 시스템과 운영 기능을 연결합니다.",
+          title: "External Workflow",
+          text: "결제, OAuth, 리포트 출력 등 외부 시스템과 내부 데이터를 연결합니다.",
           tags: ["Payment", "OAuth", "Report"]
         }
       ]
@@ -64,84 +67,97 @@ const slides = [
   {
     chapter: "REST API Development",
     title: "REST API Development",
-    subtitle: "요청부터 응답까지 운영자가 실제로 사용하는 흐름을 기준으로 구현합니다.",
-    label: "API Flow",
+    subtitle: "운영자가 사용하는 요청 흐름을 기준으로 API 계층과 예외 흐름을 정리했습니다.",
+    label: "PAAR / API",
     content: {
-      type: "flow",
-      highlight: "요청 처리 흐름을 계층별로 분리하고, 입력 검증과 예외 상황을 함께 고려했습니다. 단순 구현보다 운영자가 안정적으로 사용할 수 있는 API 흐름을 만드는 데 집중했습니다.",
-      steps: ["Client", "Controller", "Service", "MyBatis Mapper", "MySQL", "Response"]
+      type: "paar",
+      items: [
+        { key: "P", title: "Problem", text: "요청 처리 로직이 화면/기능별로 흩어지면 검증, 예외 처리, 데이터 저장 흐름을 추적하기 어렵습니다." },
+        { key: "A", title: "Analyze", text: "컨트롤러에 로직을 집중하는 방식과 계층을 분리하는 방식을 비교했고, 유지보수와 테스트 흐름을 고려해 Controller-Service-Mapper 구조를 선택했습니다." },
+        { key: "A", title: "Action", text: "입력값 검증, 서비스 로직, MyBatis Mapper 호출, 응답 반환 흐름을 분리하고 예외 상황을 함께 확인했습니다." },
+        { key: "R", title: "Result", text: "요청부터 DB 처리와 응답까지 흐름을 단계별로 설명할 수 있게 되었고, 기능 수정 시 영향 범위를 더 빠르게 확인할 수 있었습니다." }
+      ],
+      flow: ["Client", "Controller", "Service", "Mapper", "DB", "Response"]
     }
   },
   {
     chapter: "Database & MyBatis",
     title: "Database & MyBatis",
-    subtitle: "데이터 구조와 조회 성능을 고려해 운영 기능의 기반을 설계합니다.",
-    label: "DB & Query",
+    subtitle: "데이터 구조, 조회 조건, 페이징 요구사항을 기준으로 쿼리 흐름을 설계했습니다.",
+    label: "PAAR / DB",
     content: {
-      type: "kpiTable",
-      kpis: [
-        { value: "Model", label: "Data Modeling" },
-        { value: "CRUD", label: "CRUD Logic" },
-        { value: "Search", label: "Search & Pagination" }
+      type: "paar",
+      items: [
+        { key: "P", title: "Problem", text: "관리 기능은 데이터가 늘어날수록 목록 조회, 조건 검색, 페이지 이동이 느려지거나 복잡해질 수 있습니다." },
+        { key: "A", title: "Analyze", text: "단순 전체 조회와 조건 기반 쿼리 분리를 비교했고, 운영자가 필요한 데이터만 찾을 수 있도록 검색 조건과 페이징을 쿼리 단계에서 처리하는 방식을 선택했습니다." },
+        { key: "A", title: "Action", text: "테이블 구조를 정리하고 MyBatis Mapper 기반 CRUD, 조건 검색, 페이징 쿼리와 입력값 검증 흐름을 구현했습니다." },
+        { key: "R", title: "Result", text: "목록, 검색, 상세, 수정 흐름을 일관된 데이터 처리 방식으로 연결했고, 화면에서 케이스별 조회 결과를 직접 확인하며 검증했습니다." }
       ],
-      headers: ["구분", "구현 내용", "목적"],
-      rows: [
-        ["데이터 모델링", "업무 데이터 구조 정리 및 테이블 설계", "확장 가능한 저장 구조 확보"],
-        ["MyBatis 쿼리", "Mapper 기반 CRUD, 조건 검색, 페이징 처리", "운영자가 필요한 조회 흐름 제공"],
-        ["데이터 검증", "입력값과 처리 결과의 일관성 확인", "오류 데이터와 예외 상황 감소"]
-      ]
+      evidence: ["Data Modeling", "CRUD", "Search", "Pagination"]
     }
   },
   {
     chapter: "External API Integration",
     title: "External API Integration",
-    subtitle: "결제와 소셜 로그인 연동으로 서비스 진입과 거래 흐름을 구현합니다.",
-    label: "Integration",
+    subtitle: "가이드 문서와 반복 테스트를 기반으로 결제·OAuth 연동 흐름을 내부 데이터와 연결했습니다.",
+    label: "PAAR / Integration",
     content: {
-      type: "integration",
-      cards: [
-        { title: "KG이니시스 결제 연동", text: "결제 요청, 승인 결과 처리, 저장 흐름 구현" },
-        { title: "카카오 OAuth 로그인", text: "인가 코드, 토큰 처리, 사용자 정보 매핑" },
-        { title: "네이버 OAuth 로그인", text: "Callback 검증과 회원 데이터 연동 처리" }
+      type: "paar",
+      items: [
+        { key: "P", title: "Problem", text: "결제와 OAuth는 제공자별 요청값, 콜백 파라미터, 토큰 처리 방식이 달라 문서 흐름을 정확히 따라가지 않으면 연동이 쉽게 끊겼습니다." },
+        { key: "A", title: "Analyze", text: "공식 가이드의 샘플 흐름을 먼저 기준으로 잡고, 프론트에서 처리할 값과 서버에서 검증·저장할 값을 나눠 보며 어떤 지점에서 실패하는지 반복 테스트했습니다." },
+        { key: "A", title: "Action", text: "KG이니시스 결제 요청·승인 결과 처리와 카카오/네이버 OAuth 인가 코드·토큰·사용자 정보 매핑을 구현하고, 케이스별 로그와 DB 저장 결과를 확인했습니다." },
+        { key: "R", title: "Result", text: "가이드 기반으로 요청-콜백-검증-저장 흐름을 정리했고, 정상/실패 케이스를 여러 번 테스트해 화면 전환과 저장 결과가 일치하는지 검증했습니다." }
       ],
-      steps: ["Request", "Provider", "Callback", "Validation", "DB Save", "Response"]
+      flow: ["Guide Check", "Request", "Callback", "Token / Approval", "DB Save", "Test"]
     }
   },
   {
     chapter: "ClipSoft Report Output",
     title: "ClipSoft Report Output",
-    subtitle: "ClipSoft 인쇄/리포트 API를 연동해 결과 데이터를 미리보기, 인쇄, 내보내기 흐름으로 연결했습니다.",
-    label: "Report Output",
+    subtitle: "ClipSoft 가이드와 유선 문의, AI 도움을 함께 활용해 결과표 출력 흐름을 구현했습니다.",
+    label: "PAAR / Report",
     content: {
-      type: "flow",
-      steps: ["DB Data", "Result Calculation", "Report Data Mapping", "ClipSoft Template", "Preview / Print / Export"]
+      type: "paar",
+      items: [
+        { key: "P", title: "Problem", text: "검사 결과 데이터를 화면에 표시하는 것과 리포트 템플릿에 정확히 매핑해 출력하는 것은 처리 방식이 달라, 출력값 누락과 형식 불일치가 발생할 수 있었습니다." },
+        { key: "A", title: "Analyze", text: "ClipSoft 가이드를 중심으로 데이터셋 구성 방식과 템플릿 매핑 방식을 확인했고, 이해가 어려운 부분은 유선 컨택과 AI 도움으로 원인을 좁혔습니다." },
+        { key: "A", title: "Action", text: "DB 결과와 채점 데이터를 리포트 양식에 맞게 가공하고, 미리보기·인쇄·내보내기 과정에서 실제 출력값이 템플릿 위치와 맞는지 반복 확인했습니다." },
+        { key: "R", title: "Result", text: "화면 결과와 출력 결과를 대조하며 누락 데이터를 줄였고, 결과표를 운영자가 바로 확인·인쇄할 수 있는 흐름으로 연결했습니다." }
+      ],
+      flow: ["Guide Study", "Data Mapping", "Phone Check", "AI Support", "Preview", "Print / Export"]
     }
   },
   {
     chapter: "Psychological Test Module",
     title: "Psychological Test Module",
-    subtitle: "검사 응답 수집부터 채점, 결과 산출, 결과표 출력까지 end-to-end로 구현합니다.",
-    label: "Test Module",
+    subtitle: "뷰에서 체크한 응답을 종합해 묶어 보내고, 채점·결과 산출까지 연결하는 과정에서 문제를 해결했습니다.",
+    label: "PAAR / Test",
     content: {
-      type: "process",
-      steps: ["검사 페이지 구성", "응답 데이터 저장", "채점 로직 처리", "결과 화면 제공", "결과표 출력"]
+      type: "paar",
+      items: [
+        { key: "P", title: "Problem", text: "심리검사 문항에서 체크한 값들을 뷰에서 모두 종합해 한 번에 묶어 보내야 했는데, 응답 구조가 복잡해 누락되거나 원하는 형태로 전달되지 않는 문제가 있었습니다." },
+        { key: "A", title: "Analyze", text: "개별 문항을 따로 전송하는 방식과 화면에서 응답을 모아 구조화한 뒤 보내는 방식을 비교했고, 채점 로직까지 이어지려면 후자가 더 적합하다고 판단했습니다." },
+        { key: "A", title: "Action", text: "웹 검색과 AI 도움으로 체크값 수집 방식을 정리하고, JavaScript에서 응답을 묶어 서버로 전달한 뒤 저장·채점·결과 화면·결과표 출력까지 단계별로 연결했습니다." },
+        { key: "R", title: "Result", text: "응답 데이터가 의도한 구조로 전달되는지 브라우저와 서버 로그, DB 저장값을 비교해 확인했고, 검사 진행부터 결과 출력까지 이어지는 흐름을 검증했습니다." }
+      ],
+      flow: ["체크값 수집", "응답 묶기", "서버 전송", "저장", "채점", "결과 출력"]
     }
   },
   {
     chapter: "Board & Admin Features",
     title: "Board & Admin Features",
-    subtitle: "운영자가 반복적으로 사용하는 게시판과 관리 기능을 안정적으로 구현합니다.",
-    label: "Admin CRUD",
+    subtitle: "반복적인 운영 업무를 안정적으로 처리할 수 있도록 CRUD와 검색·페이징을 구성했습니다.",
+    label: "PAAR / Admin",
     content: {
-      type: "featureTable",
-      features: ["등록", "조회", "수정", "삭제", "검색", "페이징", "요구사항 반영"],
-      headers: ["기능", "구현 포인트", "운영 효과"],
-      rows: [
-        ["CRUD", "게시글 등록/조회/수정/삭제 흐름 구성", "콘텐츠 운영 업무 처리"],
-        ["검색", "조건 기반 검색 쿼리와 입력값 처리", "필요 데이터 빠른 탐색"],
-        ["페이징", "목록 데이터 분할 조회 및 페이지 이동", "대량 데이터 화면 안정성 확보"],
-        ["관리 기능", "운영 요구사항에 맞춘 필드와 상태 처리", "관리자 업무 효율 개선"]
-      ]
+      type: "paar",
+      items: [
+        { key: "P", title: "Problem", text: "관리자가 반복적으로 사용하는 게시판 기능은 등록, 수정, 검색, 페이징이 분리되어 있으면 운영 효율이 떨어집니다." },
+        { key: "A", title: "Analyze", text: "기본 CRUD만 제공하는 방식과 운영 조건을 함께 반영하는 방식을 비교했고, 실제 관리 화면에서는 검색과 페이징이 핵심이라고 판단했습니다." },
+        { key: "A", title: "Action", text: "등록, 조회, 수정, 삭제 흐름에 조건 검색, 페이지 이동, 요구사항별 필드와 상태 처리를 함께 구현했습니다." },
+        { key: "R", title: "Result", text: "운영자가 필요한 데이터를 빠르게 찾고 수정할 수 있는 관리 흐름을 만들었고, 케이스별 CRUD와 검색 결과를 화면에서 검증했습니다." }
+      ],
+      evidence: ["등록", "조회", "수정", "삭제", "검색", "페이징"]
     }
   },
   {
@@ -163,28 +179,28 @@ const slides = [
   {
     chapter: "AI Tooling",
     title: "AI-Assisted Development",
-    subtitle: "AI 도구를 적극적으로 활용해 구현 속도와 문제 해결 품질을 함께 높입니다.",
+    subtitle: "가이드 문서, 웹 검색, 유선 문의로 확인한 내용을 AI와 함께 정리하며 문제를 해결했습니다.",
     label: "AI Workflow",
     content: {
       type: "aiTools",
       cards: [
         {
-          title: "Code Review & Refactoring",
-          text: "구현 후 코드 흐름을 점검하고, 중복 제거와 가독성 개선 포인트를 빠르게 찾습니다.",
-          tags: ["Review", "Refactoring", "Readability"]
+          title: "Guide Interpretation",
+          text: "결제, OAuth, ClipSoft처럼 가이드가 중요한 기능은 문서 흐름을 먼저 읽고 필요한 요청값과 응답값을 정리했습니다.",
+          tags: ["Guide", "API Docs", "Parameter"]
         },
         {
-          title: "Debugging Support",
-          text: "오류 로그와 예외 상황을 기반으로 원인을 좁히고, 검증할 가설을 정리합니다.",
-          tags: ["Error Log", "Trace", "Hypothesis"]
+          title: "Issue Narrowing",
+          text: "막히는 부분은 웹 검색과 AI를 활용해 가능한 원인을 좁히고, 로그와 테스트 케이스로 실제 원인을 확인했습니다.",
+          tags: ["Search", "AI", "Debugging"]
         },
         {
-          title: "Documentation & Learning",
-          text: "API 문서, 라이브러리 사용법, 구현 대안을 비교하며 필요한 내용을 빠르게 학습합니다.",
-          tags: ["Docs", "Research", "Compare"]
+          title: "External Check",
+          text: "ClipSoft처럼 문서만으로 해결이 어려운 부분은 유선 문의로 확인한 뒤 구현 방향에 반영했습니다.",
+          tags: ["Contact", "Validation", "Apply"]
         }
       ],
-      workflow: ["요구사항 정리", "구현 방향 검토", "코드 작성", "오류 분석", "리팩토링", "검증"]
+      workflow: ["가이드 확인", "선택지 비교", "구현", "오류 확인", "문의/검색", "반복 테스트"]
     }
   },
   {
@@ -234,6 +250,51 @@ function renderFlow(steps, highlight) {
   ${highlight ? `<p class="portfolio-slide-highlight">${highlight}</p>` : ""}`;
 }
 
+function renderDashboard(content) {
+  return `<div class="portfolio-slide-dashboard">
+    <div class="portfolio-slide-dashboard-metrics">
+      ${content.metrics.map((metric) => `<div class="portfolio-slide-dashboard-metric"><strong>${metric.value}</strong><span>${metric.label}</span></div>`).join("")}
+    </div>
+    <div class="portfolio-slide-dashboard-cards">
+      ${content.cards
+        .map(
+          (card) => `<section class="portfolio-slide-dashboard-card">
+            <h3>${card.title}</h3>
+            <p>${card.text}</p>
+            <div class="portfolio-slide-tags">${card.tags.map((tag) => `<span>${tag}</span>`).join("")}</div>
+          </section>`
+        )
+        .join("")}
+    </div>
+  </div>`;
+}
+
+function renderPaar(content) {
+  return `<div class="portfolio-slide-paar-layout">
+    <div class="portfolio-slide-paar-grid">
+      ${content.items
+        .map(
+          (item) => `<section class="portfolio-slide-paar-card portfolio-slide-paar-${item.key.toLowerCase()}">
+            <span>${item.key}</span>
+            <h3>${item.title}</h3>
+            <p>${item.text}</p>
+          </section>`
+        )
+        .join("")}
+    </div>
+    ${
+      content.flow
+        ? `<div class="portfolio-slide-paar-flow" style="--flow-count: ${content.flow.length}">${content.flow.map((step, index) => `<span data-step="${pad(index + 1)}">${step}</span>`).join("")}</div>`
+        : ""
+    }
+    ${
+      content.evidence
+        ? `<div class="portfolio-slide-evidence-list">${content.evidence.map((item) => `<span>${item}</span>`).join("")}</div>`
+        : ""
+    }
+  </div>`;
+}
+
 function renderTable(headers, rows) {
   return `<div class="portfolio-slide-table-wrap">
     <table class="portfolio-slide-table">
@@ -261,6 +322,10 @@ function renderContent(slide) {
     return renderCards(content.cards);
   }
 
+  if (content.type === "dashboard") {
+    return renderDashboard(content);
+  }
+
   if (content.type === "skillMap") {
     return `<div class="portfolio-slide-skill-map">
       ${content.areas
@@ -276,6 +341,10 @@ function renderContent(slide) {
 
   if (content.type === "flow") {
     return renderFlow(content.steps, content.highlight);
+  }
+
+  if (content.type === "paar") {
+    return renderPaar(content);
   }
 
   if (content.type === "kpiTable") {
