@@ -450,7 +450,7 @@ const slides = [
   {
     "chapter": "Psychological Test Module",
     "title": "응답을 이어가는 설계",
-    "subtitle": "심리검사 구현 사례 · 문항 번호로 선택값을 저장하고, 화면을 다시 그릴 때 단일 선택 상태를 복원했습니다.",
+    "subtitle": "페이지를 넘겨도 선택한 응답이 유지되도록 화면과 상태를 분리했습니다.",
     "label": "Case Study / Response State",
     "content": {
       "type": "stateDemo",
@@ -762,6 +762,24 @@ const slides = [
   }
 ];
 
+const arrowIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>';
+function renderEditorial(slide) {
+ const c=slide.content;
+ switch(c.type) {
+ case 'cover': return `<div class="intro-summary"><p>Java와 Spring MVC를 중심으로 심리검사, 결제, 인증, 리포트 기능을 개발했습니다. 화면의 입력을 서버 처리와 저장, 결과 조회까지 연결한 경험을 소개합니다.</p><button class="primary-action" type="button" data-index="8">응답 유지 사례 보기 ${arrowIcon}</button></div><div class="selected-work"><h2>직접 연결한 서비스 흐름</h2><div class="work-ledger">${[['8','심리검사','문항별 응답 유지와 검사 API 연동','입력과 상태'],['5','결제 연동','인증 응답부터 승인·이력 저장까지','처리와 정합성'],['7','리포트 출력','템플릿과 사용자 데이터를 웹 뷰어로','데이터와 결과']].map(([id,title,text,scope])=>`<button type="button" data-index="${id}"><span><strong>${title}</strong><span>${text}</span></span><em>${scope}</em>${arrowIcon}</button>`).join('')}</div></div>`;
+ case 'dashboard': return `<div class="experience-record"><div class="employment"><h2>에듀인테크</h2><p>개발팀</p><span>2023.08 — 2025.09</span></div><div class="experience-scope">${c.cards.map((card,i)=>`<section><h2>${['서비스 기능 구현','화면부터 서버까지','외부 시스템 연동'][i]}</h2><p>${safe(card.text)}</p><span>${card.tags.map(safe).join(' · ')}</span></section>`).join('')}</div></div><p class="experience-stack">주요 실무 환경 <strong>Java · Spring MVC · MyBatis · MySQL</strong></p>`;
+ case 'skillMap': return `<div class="skill-ledger"><table><caption class="sr-only">실무 기술과 사용 맥락</caption><thead><tr><th scope="col">사용 영역</th><th scope="col">기술</th><th scope="col">구현에 사용한 맥락</th></tr></thead><tbody>${c.areas.slice(0,3).map((area,i)=>`<tr><th scope="row">${['서버 처리','화면과 상태','데이터와 외부 연동'][i]}</th><td>${area.items.map(safe).join('<br>')}</td><td>${['요청 수신, 서비스 로직과 Mapper 연결','화면 입력, 비동기 전송과 문항별 응답 유지','검사 결과 저장, 결제·인증·리포트 연동'][i]}</td></tr>`).join('')}</tbody></table></div><section class="education-note"><h2>교육 과정에서 학습한 기술</h2><p>Java·Spring 웹 개발, OracleDB, Tomcat</p><span>2022.08 — 2023.02</span></section>`;
+ case 'architecture': return `<div class="request-system">${stages([['화면 요청','JSP · JavaScript · AJAX'],['서버 처리','Spring MVC Controller'],['데이터 접근','Service · MyBatis Mapper'],['저장·조회','MySQL → 결과 화면']])}</div><div class="story-pair">${story('기능을 끝까지 연결',c.originalItems[0].text)}${story('기존 구조를 이해하며 구현','컨트롤러·서비스·Mapper의 호출 흐름을 파악하고 데이터 수신, 외부 연동과 저장을 기능별로 연결했습니다.')}</div>${closing('심리검사·게시판 등에서 연결한 실제 요청 흐름입니다. 새로운 아키텍처를 비교·도입했다는 성과와는 구분합니다.')}`;
+ case 'transaction': return `<div class="payment-sequence">${stages([['결제 요청','주문·가격 정보와 요청 서명'],['인증 확인','응답 코드·승인 URL 검증'],['승인 호출','PG 승인 API 응답 처리'],['이력 저장','회원·상품·거래 정보 연결']])}</div><div class="payment-detail">${story('구현한 범위','주문번호·가격 기반 파라미터와 서명을 구성하고, 인증 응답 확인부터 승인 요청과 결제 이력 저장까지 연결했습니다.')}<aside class="transaction-exception"><h2>예외 시 망취소 호출</h2><p>승인 응답을 처리하는 특정 예외 구간에서 망취소 API를 호출하도록 구성했습니다.</p></aside></div>${closing('중복 처리 방지와 승인·저장 실패의 복구 범위는 추가 보완 과제입니다. 모든 실패가 자동 복구된다고 설명하지 않습니다.')}`;
+ case 'stateDemo': return `<div class="demo-introduction"><p>실제 검사는 10문항씩 표시했습니다. 화면이 바뀌어도 문항 번호로 저장한 응답을 다시 찾아 체크 상태를 복원했습니다.</p><ol class="state-loop"><li>선택 변경</li><li><strong>응답 저장</strong></li><li>다시 표시할 때 복원</li></ol></div><section class="response-demo" data-ui aria-label="응답 유지 동작 원리 데모"><div class="demo-heading"><div><h2>선택한 뒤, 다음 화면을 다녀오세요.</h2><p class="demo-caption">원리 재현용 예시 4문항 · 실제 검사와 무관합니다.</p></div><span id="demoPageLabel">${demoState.page+1} / 2</span></div><div id="demoQuestions">${demoQuestions()}</div><div class="demo-toolbar"><button type="button" data-demo-page="0" ${demoState.page===0?'disabled':''}>이전 묶음</button><span id="demoCount" role="status">${Object.keys(demoState.answers).length} / 4 응답</span><button type="button" data-demo-page="1" ${demoState.page===1?'disabled':''}>다음 묶음</button></div></section><div class="demo-footnote"><p>실무 구현은 <code>localStorage</code>와 문항 변경 이벤트를 사용했습니다.</p><p>이 데모는 메모리에서 동작하며 새로고침 시 초기화됩니다. 응답 전송이나 결과 생성은 하지 않습니다.</p></div>`;
+ case 'board': return `<div class="board-intro"><h2>게시글의 전체 흐름을 연결했습니다.</h2><p>공지·문의의 목록과 상세 조회부터 작성·수정·삭제까지 화면 요청과 서버 처리를 연결했습니다.</p></div><dl class="board-actions"><div><dt>등록</dt><dd>제목·내용 등 요청값을 구성한 뒤 저장</dd></div><div><dt>조회</dt><dd>목록과 상세 데이터 연결</dd></div><div><dt>수정·삭제</dt><dd>선택한 게시글의 데이터 처리</dd></div><div><dt>페이지 구분</dt><dd>전체 조회 후 JavaScript로 20개씩 표시</dd></div></dl>${closing('Controller·Service·MyBatis를 사용했습니다. 화면 페이지 구분과 DB 쿼리 단계의 페이지네이션은 구분해 설명합니다.')}`;
+ case 'reflection':return `<div class="reflection-table"><table><caption class="sr-only">현재 구현과 향후 개선 방향 비교</caption><thead><tr><th scope="col">검토 영역</th><th scope="col">현재 구현</th><th scope="col">다음 개선 방향</th></tr></thead><tbody>${[['응답 상태','문항 번호별 선택값 저장','검사·응시 단위 분리와 복수 선택 복원'],['점수 검증','브라우저 집계 후 저장','서버에서 응답 검증과 최종 점수 계산'],['결제 정합성','성공 건 저장·특정 예외의 망취소','중복 처리 방지와 실패 상태 추적'],['조회 구조','전체 조회·화면 페이지 구분','규모 측정 후 서버 페이지네이션 검토']].map(row=>`<tr><th scope="row">${row[0]}</th><td>${row[1]}</td><td>${row[2]}</td></tr>`).join('')}</tbody></table></div>${closing('완료한 개선 성과가 아닌 회고입니다. 현재 구현의 경계를 이해하고 다음에 검증할 방향을 정리했습니다.')}`;
+ case 'aiTools':return `<div class="tooling-notes">${c.cards.map((card,i)=>`<section><h2>${['먼저, 규격과 기존 코드 확인','초안은 도구로, 판단은 직접','불명확하면 문서 밖에서 확인'][i]}</h2><p>${safe(card.text)}</p></section>`).join('')}</div><ol class="tooling-process">${c.workflow.map(step=>`<li>${safe(step)}</li>`).join('')}</ol>`;
+ case 'thanks':return `<div class="closing-statement"><p>${c.message.map(safe).join('<br>')}</p><div class="closing-actions"><a href="https://github.com/SleeveStar/Portfolio" target="_blank" rel="noopener noreferrer">포트폴리오 소스 보기 ${arrowIcon}</a><button type="button" data-index="8">구현 사례 다시 보기 ${arrowIcon}</button></div></div>`;
+ }
+ return null;
+}
+
 const craftedTypes=new Set(['architecture','dataModel','transaction','branch','report','stateDemo','transform','board','reflection']);
 const demoState={page:0,answers:{}};
 const safe=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -813,6 +831,9 @@ document.addEventListener('click',event=>{
 const initialSlide = slides.findIndex(slide => '#'+slide.id === window.location.hash);
 let currentIndex = Math.max(0, initialSlide);
 let isWheelLocked = false;
+let isKeyboardInteraction = false;
+document.addEventListener('keydown',()=>{isKeyboardInteraction=true;},{capture:true});
+document.addEventListener('pointerdown',()=>{isKeyboardInteraction=false;},{capture:true});
 
 const slideEl = document.querySelector("#slide");
 const prevButton = document.querySelector("#prevSlide");
@@ -899,6 +920,8 @@ function renderTable(headers, rows) {
 }
 
 function renderContent(slide) {
+  const editorial=renderEditorial(slide);
+  if(editorial!==null)return editorial;
   const { content } = slide;
   if (craftedTypes.has(content.type)) return renderCrafted(slide);
 
@@ -1009,7 +1032,7 @@ function renderContent(slide) {
 function renderDots() {
   dotsEl.innerHTML = slides
     .map(
-      (_, index) => `<button class="portfolio-slide-dot" type="button" aria-label="${index + 1}. ${slides[index].title}" title="${slides[index].title}" data-index="${index}"></button>`
+      (_, index) => `<button class="portfolio-slide-dot" type="button" aria-label="${index + 1}. ${slides[index].title}" title="${slides[index].title}" data-index="${index}">${chapterNames[index]}</button>`
     )
     .join("");
 
@@ -1018,31 +1041,29 @@ function renderDots() {
     if (!button) return;
     currentIndex = Number(button.dataset.index);
     renderSlide();
+    window.scrollTo({top:0,behavior:"instant"});
   });
 }
 
-function renderSlide({ instant = false } = {}) {
+function renderSlide({ instant = isKeyboardInteraction } = {}) {
   const slide = slides[currentIndex];
   const crafted = craftedTypes.has(slide.content.type);
   document.querySelector('.portfolio-slide-stage').classList.toggle('is-crafted', crafted);
-  slideEl.className = `portfolio-slide-card portfolio-slide-${slide.variant || 'default'}${crafted ? ' portfolio-slide-crafted' : ''}${instant ? ' is-instant' : ''}`;
+  slideEl.className = `portfolio-slide-card case-${slide.id} portfolio-slide-${slide.variant || 'default'}${crafted ? ' portfolio-slide-crafted' : ''}${instant ? ' is-instant' : ''}`;
   try { window.history.replaceState(null,'','#'+slide.id); } catch {}
   document.title = slide.title + ' | 송다원';
   slideEl.innerHTML = `
     <header class="portfolio-slide-header">
-      <div class="portfolio-slide-chapter">${slide.chapter}</div>
+
       <div>
         ${slide.role ? `<span class="portfolio-slide-role">${slide.role}</span>` : ""}
-        <h1>${slide.title}</h1>
-        ${slide.name ? `<span class="portfolio-slide-name">${slide.name}</span>` : ""}
+        <h1>${slide.id === "cover" ? "입력에서 결과까지<br>흐름을 연결합니다." : slide.id === "closing" ? "다음 흐름을 함께<br>만들고 싶습니다." : safe(slide.title)}</h1>
+
         <p>${slide.subtitle}</p>
       </div>
     </header>
     <div class="portfolio-slide-body">${renderContent(slide)}</div>
-    <footer class="portfolio-slide-footer">
-      <span>${pad(currentIndex + 1)} / ${pad(slides.length)}</span>
-      <span>${slide.label}</span>
-    </footer>
+
   `;
 
   const picker = document.querySelector('#chapterSelect');
@@ -1056,6 +1077,7 @@ function renderSlide({ instant = false } = {}) {
     dot.classList.toggle("is-active", index === currentIndex);
     dot.setAttribute("aria-current", index === currentIndex ? "true" : "false");
   });
+  window.scrollTo({top:0,behavior:'instant'});
 }
 
 function goToNextSlide(options) {
@@ -1107,9 +1129,14 @@ window.addEventListener(
 );
 
 const chapterSelect = document.querySelector('#chapterSelect');
-const chapterNames = ['소개','경력','기술 역량','요청 처리','데이터 저장','결제 연동','소셜 로그인','리포트 출력','응답 유지','데이터 변환','게시판','개선 방향','AI 활용','연락처'];
+const chapterNames = ['소개','경력','기술 역량','요청 처리','데이터 저장','결제 연동','소셜 로그인','리포트 출력','응답 유지','데이터 변환','게시판','개선 방향','AI 활용','마무리'];
 chapterSelect.innerHTML = slides.map((slide,index)=>`<option value="${index}">${chapterNames[index]}</option>`).join('');
 chapterSelect.addEventListener('change',()=>{currentIndex=Number(chapterSelect.value);renderSlide();window.scrollTo({top:0,behavior:'instant'});});
 window.addEventListener('hashchange',()=>{const next=slides.findIndex(slide=>'#'+slide.id===window.location.hash);if(next>=0&&next!==currentIndex){currentIndex=next;renderSlide();}});
+document.addEventListener('click', event=>{
+ const target=event.target.closest('[data-index]');
+ if(!target || target.closest('#slideDots')) return;
+ currentIndex=Number(target.dataset.index);renderSlide();window.scrollTo({top:0,behavior:'instant'});
+});
 renderDots();
 renderSlide();
