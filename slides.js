@@ -766,12 +766,12 @@ const arrowIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 function renderEditorial(slide) {
  const c=slide.content;
  switch(c.type) {
- case 'cover': return `<div class="intro-summary"><p>Java와 Spring MVC를 중심으로 심리검사, 결제, 인증, 리포트 기능을 개발했습니다. 화면의 입력을 서버 처리와 저장, 결과 조회까지 연결한 경험을 소개합니다.</p><button class="primary-action" type="button" data-index="8">응답 유지 사례 보기 ${arrowIcon}</button></div><div class="selected-work"><h2>직접 연결한 서비스 흐름</h2><div class="work-ledger">${[['8','심리검사','문항별 응답 유지와 검사 API 연동','입력과 상태'],['5','결제 연동','인증 응답부터 승인·이력 저장까지','처리와 정합성'],['7','리포트 출력','템플릿과 사용자 데이터를 웹 뷰어로','데이터와 결과']].map(([id,title,text,scope])=>`<button type="button" data-index="${id}"><span><strong>${title}</strong><span>${text}</span></span><em>${scope}</em>${arrowIcon}</button>`).join('')}</div></div>`;
+ case 'cover': return `<div class="intro-summary"><p>Java·Spring MVC로 심리검사, 결제, 인증과 리포트를 개발했습니다. 입력부터 결과 조회까지 연결한 경험을 소개합니다.</p><button class="primary-action" type="button" data-index="8">응답 유지 사례 보기 ${arrowIcon}</button></div>${renderLiveFlow()}`;
  case 'dashboard': return `<div class="experience-record"><div class="employment"><h2>에듀인테크</h2><p>개발팀</p><span>2023.08 — 2025.09</span></div><div class="experience-scope">${c.cards.map((card,i)=>`<section><h2>${['서비스 기능 구현','화면부터 서버까지','외부 시스템 연동'][i]}</h2><p>${safe(card.text)}</p><span>${card.tags.map(safe).join(' · ')}</span></section>`).join('')}</div></div><p class="experience-stack">주요 실무 환경 <strong>Java · Spring MVC · MyBatis · MySQL</strong></p>`;
  case 'skillMap': return `<div class="skill-ledger"><table><caption class="sr-only">실무 기술과 사용 맥락</caption><thead><tr><th scope="col">사용 영역</th><th scope="col">기술</th><th scope="col">구현에 사용한 맥락</th></tr></thead><tbody>${c.areas.slice(0,3).map((area,i)=>`<tr><th scope="row">${['서버 처리','화면과 상태','데이터와 외부 연동'][i]}</th><td>${area.items.map(safe).join('<br>')}</td><td>${['요청 수신, 서비스 로직과 Mapper 연결','화면 입력, 비동기 전송과 문항별 응답 유지','검사 결과 저장, 결제·인증·리포트 연동'][i]}</td></tr>`).join('')}</tbody></table></div><section class="education-note"><h2>교육 과정에서 학습한 기술</h2><p>Java·Spring 웹 개발, OracleDB, Tomcat</p><span>2022.08 — 2023.02</span></section>`;
  case 'architecture': return `<div class="request-system">${stages([['화면 요청','JSP · JavaScript · AJAX'],['서버 처리','Spring MVC Controller'],['데이터 접근','Service · MyBatis Mapper'],['저장·조회','MySQL → 결과 화면']])}</div><div class="story-pair">${story('기능을 끝까지 연결',c.originalItems[0].text)}${story('기존 구조를 이해하며 구현','컨트롤러·서비스·Mapper의 호출 흐름을 파악하고 데이터 수신, 외부 연동과 저장을 기능별로 연결했습니다.')}</div>${closing('심리검사·게시판 등에서 연결한 실제 요청 흐름입니다. 새로운 아키텍처를 비교·도입했다는 성과와는 구분합니다.')}`;
  case 'transaction': return `<div class="payment-sequence">${stages([['결제 요청','주문·가격 정보와 요청 서명'],['인증 확인','응답 코드·승인 URL 검증'],['승인 호출','PG 승인 API 응답 처리'],['이력 저장','회원·상품·거래 정보 연결']])}</div><div class="payment-detail">${story('구현한 범위','주문번호·가격 기반 파라미터와 서명을 구성하고, 인증 응답 확인부터 승인 요청과 결제 이력 저장까지 연결했습니다.')}<aside class="transaction-exception"><h2>예외 시 망취소 호출</h2><p>승인 응답을 처리하는 특정 예외 구간에서 망취소 API를 호출하도록 구성했습니다.</p></aside></div>${closing('중복 처리 방지와 승인·저장 실패의 복구 범위는 추가 보완 과제입니다. 모든 실패가 자동 복구된다고 설명하지 않습니다.')}`;
- case 'stateDemo': return `<div class="demo-introduction"><p>실제 검사는 10문항씩 표시했습니다. 화면이 바뀌어도 문항 번호로 저장한 응답을 다시 찾아 체크 상태를 복원했습니다.</p><ol class="state-loop"><li>선택 변경</li><li><strong>응답 저장</strong></li><li>다시 표시할 때 복원</li></ol></div><section class="response-demo" data-ui aria-label="응답 유지 동작 원리 데모"><div class="demo-heading"><div><h2>선택한 뒤, 다음 화면을 다녀오세요.</h2><p class="demo-caption">원리 재현용 예시 4문항 · 실제 검사와 무관합니다.</p></div><span id="demoPageLabel">${demoState.page+1} / 2</span></div><div id="demoQuestions">${demoQuestions()}</div><div class="demo-toolbar"><button type="button" data-demo-page="0" ${demoState.page===0?'disabled':''}>이전 묶음</button><span id="demoCount" role="status">${Object.keys(demoState.answers).length} / 4 응답</span><button type="button" data-demo-page="1" ${demoState.page===1?'disabled':''}>다음 묶음</button></div></section><div class="demo-footnote"><p>실무 구현은 <code>localStorage</code>와 문항 변경 이벤트를 사용했습니다.</p><p>이 데모는 메모리에서 동작하며 새로고침 시 초기화됩니다. 응답 전송이나 결과 생성은 하지 않습니다.</p></div>`;
+ case 'stateDemo': return `<div class="demo-introduction"><p>실제 검사는 10문항씩 표시했습니다. 화면이 바뀌어도 문항 번호로 저장한 응답을 다시 찾아 체크 상태를 복원했습니다.</p><ol class="state-loop"><li>선택 변경</li><li><strong>응답 저장</strong></li><li>다시 표시할 때 복원</li></ol></div><section class="response-demo" data-ui aria-label="응답 유지 동작 원리 데모"><div class="demo-heading"><div><h2>선택한 뒤, 다음 화면을 다녀오세요.</h2><p class="demo-caption">원리 재현용 예시 4문항 · 실제 검사와 무관합니다.</p></div><span id="demoPageLabel">${demoState.page+1} / 2</span></div><div id="demoQuestions">${demoQuestions()}</div><div class="demo-toolbar"><button type="button" data-demo-page="0" ${demoState.page===0?'disabled':''}>이전 묶음</button><span id="demoCount" role="status">${Object.keys(demoState.answers).length} / 4 응답</span><button type="button" data-demo-page="1" ${demoState.page===1?'disabled':''}>다음 묶음</button></div><p id="demoFeedback" class="demo-feedback" role="status">선택한 응답은 화면을 바꾸어도 유지됩니다.</p></section><div class="demo-footnote"><p>실무 구현은 <code>localStorage</code>와 문항 변경 이벤트를 사용했습니다.</p><p>이 데모는 메모리에서 동작하며 새로고침 시 초기화됩니다. 응답 전송이나 결과 생성은 하지 않습니다.</p></div>`;
  case 'board': return `<div class="board-intro"><h2>게시글의 전체 흐름을 연결했습니다.</h2><p>공지·문의의 목록과 상세 조회부터 작성·수정·삭제까지 화면 요청과 서버 처리를 연결했습니다.</p></div><dl class="board-actions"><div><dt>등록</dt><dd>제목·내용 등 요청값을 구성한 뒤 저장</dd></div><div><dt>조회</dt><dd>목록과 상세 데이터 연결</dd></div><div><dt>수정·삭제</dt><dd>선택한 게시글의 데이터 처리</dd></div><div><dt>페이지 구분</dt><dd>전체 조회 후 JavaScript로 20개씩 표시</dd></div></dl>${closing('Controller·Service·MyBatis를 사용했습니다. 화면 페이지 구분과 DB 쿼리 단계의 페이지네이션은 구분해 설명합니다.')}`;
  case 'reflection':return `<div class="reflection-table"><table><caption class="sr-only">현재 구현과 향후 개선 방향 비교</caption><thead><tr><th scope="col">검토 영역</th><th scope="col">현재 구현</th><th scope="col">다음 개선 방향</th></tr></thead><tbody>${[['응답 상태','문항 번호별 선택값 저장','검사·응시 단위 분리와 복수 선택 복원'],['점수 검증','브라우저 집계 후 저장','서버에서 응답 검증과 최종 점수 계산'],['결제 정합성','성공 건 저장·특정 예외의 망취소','중복 처리 방지와 실패 상태 추적'],['조회 구조','전체 조회·화면 페이지 구분','규모 측정 후 서버 페이지네이션 검토']].map(row=>`<tr><th scope="row">${row[0]}</th><td>${row[1]}</td><td>${row[2]}</td></tr>`).join('')}</tbody></table></div>${closing('완료한 개선 성과가 아닌 회고입니다. 현재 구현의 경계를 이해하고 다음에 검증할 방향을 정리했습니다.')}`;
  case 'aiTools':return `<div class="tooling-notes">${c.cards.map((card,i)=>`<section><h2>${['먼저, 규격과 기존 코드 확인','초안은 도구로, 판단은 직접','불명확하면 문서 밖에서 확인'][i]}</h2><p>${safe(card.text)}</p></section>`).join('')}</div><ol class="tooling-process">${c.workflow.map(step=>`<li>${safe(step)}</li>`).join('')}</ol>`;
@@ -779,6 +779,72 @@ function renderEditorial(slide) {
  }
  return null;
 }
+
+const flowStages = [
+ {title:'입력',meta:'문항별 선택',heading:'화면에서 받은 선택을 문항과 연결합니다.',text:'문항 번호를 기준으로 선택값을 구분합니다. 화면의 체크 상태와 저장할 응답을 연결하는 시작점입니다.',link:'응답 유지 데모 열기',index:8},
+ {title:'상태 유지',meta:'응답 저장·복원',heading:'화면을 다시 그려도 응답은 남아 있습니다.',text:'실무에서는 localStorage에 선택값을 저장하고 페이지를 다시 표시할 때 체크 상태를 복원했습니다.',link:'직접 선택하고 돌아와 보기',index:8},
+ {title:'API 전달',meta:'검사별 규격 변환',heading:'같은 응답도, 검사 규격에 맞춰 전달합니다.',text:'검사별 접두어·선택값·구분자 차이를 변환하고 Java 서버를 통해 커리어넷 API에 전달했습니다.',link:'데이터 변환 사례 열기',index:9},
+ {title:'결과 조회',meta:'결과 URL 저장',heading:'결과를 회원의 검사 기록으로 연결합니다.',text:'외부 API가 제공하는 결과 URL을 회원·검사명·응시일과 함께 저장해 이후 조회에 사용했습니다.',link:'저장 구조 살펴보기',index:4}
+];
+let flowTimer=null;
+let flowPlaying=false;
+let flowStep=0;
+let revealObserver=null;
+const reducedMotion=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function renderLiveFlow(){
+ return `<section class="live-flow" aria-labelledby="liveFlowTitle"><div class="live-flow-heading"><h2 id="liveFlowTitle">하나의 응답이 결과가 되기까지</h2><button type="button" class="flow-play" data-flow-play aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m9 5 10 7-10 7Z"/></svg><span>흐름 따라보기</span></button></div><div class="flow-track" role="group" aria-label="처리 단계를 선택해 설명 보기"><div class="flow-line" aria-hidden="true"><span id="flowProgress"></span></div>${flowStages.map((step,i)=>`<button type="button" data-flow-step="${i}" aria-pressed="${i===0}" aria-controls="flowDetail"><span class="flow-node" aria-hidden="true"></span><strong>${step.title}</strong><span>${step.meta}</span></button>`).join('')}</div><div class="flow-detail" id="flowDetail" aria-live="polite"><div><h3>${flowStages[0].heading}</h3><p>${flowStages[0].text}</p></div><button type="button" data-index="8">${flowStages[0].link}${arrowIcon}</button></div><p class="flow-disclosure">실무 구현의 흐름을 재구성한 설명입니다. 실제 API를 호출하지 않습니다.</p></section><div class="more-work"><button type="button" data-index="5">결제 연동 살펴보기 ${arrowIcon}</button><button type="button" data-index="7">리포트 출력 살펴보기 ${arrowIcon}</button></div>`;
+}
+function stopLiveFlow(){
+ clearTimeout(flowTimer);flowTimer=null;flowPlaying=false;
+ const button=document.querySelector('[data-flow-play]');
+ if(button){button.setAttribute('aria-pressed','false');button.querySelector('span').textContent='흐름 다시 보기';}
+ const detail=document.querySelector('#flowDetail');if(detail)detail.setAttribute('aria-live','polite');
+}
+function setFlowStep(index,{instant=false}={}){
+ const detail=document.querySelector('#flowDetail');if(!detail)return;
+ flowStep=index;const step=flowStages[index];
+ document.querySelectorAll('[data-flow-step]').forEach((button,i)=>{button.setAttribute('aria-pressed',String(i===index));button.classList.toggle('is-complete',i<index);});
+ detail.innerHTML=`<div><h3>${safe(step.heading)}</h3><p>${safe(step.text)}</p></div><button type="button" data-index="${step.index}">${safe(step.link)}${arrowIcon}</button>`;
+ const progress=document.querySelector('#flowProgress');
+ const from=getComputedStyle(progress).transform;progress.getAnimations().forEach(a=>a.cancel());
+ progress.style.transform=`scaleX(${index/3})`;
+ if(!instant&&!reducedMotion()){
+  progress.animate([{transform:from},{transform:`scaleX(${index/3})`}],{duration:500,easing:'cubic-bezier(.23,1,.32,1)'});
+  detail.animate([{opacity:.35,transform:'translateY(6px)'},{opacity:1,transform:'translateY(0)'}],{duration:220,easing:'cubic-bezier(.23,1,.32,1)'});
+ }
+}
+function playLiveFlow(){
+ if(flowPlaying){stopLiveFlow();return;}
+ document.querySelector('.live-flow').scrollIntoView({block:'nearest',behavior:isKeyboardInteraction||reducedMotion()?'instant':'smooth'});
+ flowPlaying=true;flowStep=0;
+ const button=document.querySelector('[data-flow-play]');button.setAttribute('aria-pressed','true');button.querySelector('span').textContent='재생 멈추기';
+ document.querySelector('#flowDetail').setAttribute('aria-live','off');
+ setFlowStep(0,{instant:true});
+ const advance=()=>{if(!flowPlaying)return;if(flowStep===3){stopLiveFlow();return;}setFlowStep(flowStep+1,{instant:isKeyboardInteraction});flowTimer=setTimeout(advance,1600);};
+ flowTimer=setTimeout(advance,1300);
+}
+function animateView({instant,direction=1}){
+ revealObserver?.disconnect();revealObserver=null;
+ if(instant||reducedMotion())return;
+ const easing='cubic-bezier(.23,1,.32,1)';
+ slideEl.animate([{opacity:.45,transform:`translateX(${direction*18}px)`},{opacity:1,transform:'translateX(0)'}],{duration:280,easing});
+ const parts=[slideEl.querySelector('.portfolio-slide-header'),...slideEl.querySelector('.portfolio-slide-body').children];
+ revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+  if(!entry.isIntersecting)return;
+  entry.target.animate([{opacity:.35,transform:'translateY(14px)'},{opacity:1,transform:'translateY(0)'}],{duration:280,easing});
+  revealObserver.unobserve(entry.target);
+ }),{threshold:.12,root:slideEl});
+ parts.forEach((part,index)=>{
+  if(part.getBoundingClientRect().top<slideEl.getBoundingClientRect().bottom-40)part.animate([{opacity:.35,transform:'translateY(14px)'},{opacity:1,transform:'translateY(0)'}],{duration:280,delay:Math.min(index*60,180),easing,fill:'backwards'});
+  else revealObserver.observe(part);
+ });
+}
+document.addEventListener('click',event=>{
+ const step=event.target.closest('[data-flow-step]');
+ if(step){stopLiveFlow();setFlowStep(Number(step.dataset.flowStep),{instant:isKeyboardInteraction});}
+ if(event.target.closest('[data-flow-play]'))playLiveFlow();
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopLiveFlow();});
 
 const craftedTypes=new Set(['architecture','dataModel','transaction','branch','report','stateDemo','transform','board','reflection']);
 const demoState={page:0,answers:{}};
@@ -817,6 +883,8 @@ document.addEventListener('change',event=>{
  const input=event.target.closest('input[data-question]');if(!input)return;
  demoState.answers[input.dataset.question]=input.value;
  const status=document.querySelector('#demoCount');if(status)status.textContent=Object.keys(demoState.answers).length+' / 4 응답';
+ const feedback=document.querySelector('#demoFeedback');if(feedback)feedback.textContent='예시 문항 '+input.dataset.question+'의 선택 '+input.value+'를 유지합니다.';
+ if(status&&!isKeyboardInteraction&&!reducedMotion())status.animate([{opacity:.3,transform:'translateY(3px)'},{opacity:1,transform:'translateY(0)'}],{duration:160,easing:'cubic-bezier(.23,1,.32,1)'});
 });
 document.addEventListener('click',event=>{
  const button=event.target.closest('button[data-demo-page]');if(!button)return;
@@ -824,6 +892,9 @@ document.addEventListener('click',event=>{
  document.querySelector('#demoQuestions').innerHTML=demoQuestions();
  document.querySelector('#demoPageLabel').textContent=(demoState.page+1)+' / 2';
  document.querySelectorAll('[data-demo-page]').forEach(btn=>btn.disabled=Number(btn.dataset.demoPage)===demoState.page);
+ const restored=[demoState.page*2+1,demoState.page*2+2].filter(q=>demoState.answers[q]).length;
+ const feedback=document.querySelector('#demoFeedback');if(feedback)feedback.textContent=restored?restored+'개 응답을 다시 표시했습니다.':'이 화면의 응답을 선택해 주세요.';
+ if(!isKeyboardInteraction&&!reducedMotion())document.querySelector('#demoQuestions').animate([{opacity:.35,transform:'translateY(6px)'},{opacity:1,transform:'translateY(0)'}],{duration:220,easing:'cubic-bezier(.23,1,.32,1)'});
  document.querySelector('#demoQuestions input')?.focus({preventScroll:true});
 });
 
@@ -831,6 +902,7 @@ document.addEventListener('click',event=>{
 const initialSlide = slides.findIndex(slide => '#'+slide.id === window.location.hash);
 let currentIndex = Math.max(0, initialSlide);
 let isWheelLocked = false;
+let displayedIndex=null;
 let isKeyboardInteraction = false;
 document.addEventListener('keydown',()=>{isKeyboardInteraction=true;},{capture:true});
 document.addEventListener('pointerdown',()=>{isKeyboardInteraction=false;},{capture:true});
@@ -1046,6 +1118,8 @@ function renderDots() {
 }
 
 function renderSlide({ instant = isKeyboardInteraction } = {}) {
+  const direction=displayedIndex===null||currentIndex>=displayedIndex?1:-1;
+  stopLiveFlow();
   const slide = slides[currentIndex];
   const crafted = craftedTypes.has(slide.content.type);
   document.querySelector('.portfolio-slide-stage').classList.toggle('is-crafted', crafted);
@@ -1078,6 +1152,10 @@ function renderSlide({ instant = isKeyboardInteraction } = {}) {
     dot.setAttribute("aria-current", index === currentIndex ? "true" : "false");
   });
   window.scrollTo({top:0,behavior:'instant'});
+  slideEl.scrollTop=0;
+  updateReadingControl();
+  animateView({instant,direction});
+  displayedIndex=currentIndex;
 }
 
 function goToNextSlide(options) {
@@ -1110,6 +1188,7 @@ window.addEventListener(
     const isVerticalIntent = Math.abs(event.deltaY) > Math.abs(event.deltaX);
     if (!isVerticalIntent || Math.abs(event.deltaY) < 24 || isWheelLocked) return;
     if (window.matchMedia("(max-width: 900px)").matches) return;
+    if (slideEl.scrollHeight > slideEl.clientHeight + 2) return;
     if (document.documentElement.scrollHeight > window.innerHeight + 2) return;
 
     event.preventDefault();
@@ -1137,6 +1216,19 @@ document.addEventListener('click', event=>{
  const target=event.target.closest('[data-index]');
  if(!target || target.closest('#slideDots')) return;
  currentIndex=Number(target.dataset.index);renderSlide();window.scrollTo({top:0,behavior:'instant'});
+});
+function updateReadingControl(){
+ const button=document.querySelector('#readMore');
+ const scrollable=slideEl.scrollHeight>slideEl.clientHeight+2;
+ const atEnd=slideEl.scrollTop+slideEl.clientHeight>=slideEl.scrollHeight-4;
+ button.disabled=!scrollable;button.classList.toggle('is-at-end',scrollable&&atEnd);
+ button.setAttribute('aria-label',atEnd&&scrollable?'본문 맨 위로':'본문 아래로 스크롤');
+ button.title=atEnd&&scrollable?'본문 맨 위로':'본문 아래로 읽기';
+}
+slideEl.addEventListener('scroll',updateReadingControl,{passive:true});
+document.querySelector('#readMore').addEventListener('click',()=>{
+ const atEnd=slideEl.scrollTop+slideEl.clientHeight>=slideEl.scrollHeight-4;
+ slideEl.scrollTo({top:atEnd?0:slideEl.scrollTop+slideEl.clientHeight*.7,behavior:isKeyboardInteraction||reducedMotion()?'instant':'smooth'});
 });
 renderDots();
 renderSlide();
