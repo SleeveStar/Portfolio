@@ -8,7 +8,7 @@
   </head>
   <body>
     <main class="portfolio-slide-app" aria-label="Java Backend Developer Portfolio">
-      <section class="portfolio-slide-stage" aria-live="polite">
+      <section class="portfolio-slide-stage" aria-label="포트폴리오 본문">
         <article id="slide" class="portfolio-slide-card"></article>
       </section>
 
@@ -16,7 +16,8 @@
         <button id="prevSlide" class="portfolio-slide-nav-button" type="button" aria-label="이전 슬라이드">
           <span aria-hidden="true">‹</span>
         </button>
-        <div class="portfolio-slide-status" aria-label="현재 슬라이드">
+        <select id="chapterSelect" class="portfolio-chapter-select" aria-label="포트폴리오 목차"></select>
+        <div class="portfolio-slide-status" role="status" aria-live="polite" aria-atomic="true" aria-label="현재 슬라이드">
           <strong id="currentSlide">01</strong>
           <span>/</span>
           <span id="totalSlides">10</span>
