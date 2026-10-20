@@ -763,9 +763,9 @@ const slides = [
 ];
 
 const caseTitles={
- cover:['입력에서 결과까지','흐름을 연결합니다.'],
+ cover:['Backend','Developer.'],
  experience:['기능을 넘어','서비스의 흐름'],
- skills:['실무에서','사용한 기술'],
+ skills:['서버를','중심으로'],
  request:['화면 요청을','저장·조회로'],
  data:['회원별로 남기는','검사 결과'],
  payment:['결제의 핵심은','승인과 저장'],
@@ -793,12 +793,12 @@ const arrowIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 function renderEditorial(slide) {
  const c=slide.content;
  switch(c.type) {
- case 'cover': return `<div class="intro-summary"><p>Java·Spring MVC로 심리검사·결제·인증·리포트를 구현한 송다원입니다.</p><button class="primary-action" type="button" data-index="8">응답 유지 사례 보기 ${arrowIcon}</button></div>${renderLiveFlow()}`;
+ case 'cover': return renderLiveFlow();
  case 'transform': return renderTransformation();
  case 'dashboard': return `<div class="experience-record"><div class="employment"><h2>에듀인테크</h2><p>개발팀</p><span>2023.08 — 2025.09</span></div><div class="experience-scope">${c.cards.map((card,i)=>`<section><h2>${['서비스 기능 구현','화면부터 서버까지','외부 시스템 연동'][i]}</h2><p>${emphasize(card.text)}</p><span>${card.tags.map(safe).join(' · ')}</span></section>`).join('')}</div></div><p class="experience-stack">주요 실무 환경 <strong>Java · Spring MVC · MyBatis · MySQL</strong></p>`;
- case 'skillMap': return `<div class="skill-ledger"><table><caption class="sr-only">실무 기술과 사용 맥락</caption><thead><tr><th scope="col">사용 영역</th><th scope="col">기술</th><th scope="col">구현에 사용한 맥락</th></tr></thead><tbody>${c.areas.slice(0,3).map((area,i)=>`<tr><th scope="row">${['서버 처리','화면과 상태','데이터와 외부 연동'][i]}</th><td>${area.items.map(item=>`<span class="skill-item">${safe(item)}</span>`).join('')}</td><td>${['요청 수신과 서비스·Mapper 연결','화면 입력과 문항별 응답 유지','결과 저장·결제·인증·출력 연동'][i]}</td></tr>`).join('')}</tbody></table></div><section class="education-note"><h2>교육 과정에서 학습한 기술</h2><p>Java·Spring 웹 개발, OracleDB, Tomcat</p><span>2022.08 — 2023.02</span></section>`;
+ case 'skillMap': return renderSkillLandscape(c);
  case 'architecture': return `<div class="request-system">${stages([['화면 요청','JSP · JavaScript · AJAX'],['서버 처리','Spring MVC Controller'],['데이터 접근','Service · MyBatis Mapper'],['저장·조회','MySQL → 결과 화면']])}</div><div class="story-pair">${story('기능을 끝까지 연결',c.originalItems[0].text)}${story('기존 구조를 이해하며 구현','컨트롤러·서비스·Mapper의 호출 흐름을 파악하고 데이터 수신, 외부 연동과 저장을 기능별로 연결했습니다.')}</div>${closing('JSP 요청부터 Spring MVC·MyBatis를 거쳐 MySQL 저장·조회까지 연결했습니다.')}`;
- case 'transaction': return `<div class="payment-sequence">${stages([['결제 요청','주문·가격 정보와 요청 서명'],['인증 확인','응답 코드·승인 URL 검증'],['승인 호출','PG 승인 API 응답 처리'],['이력 저장','회원·상품·거래 정보 연결']])}</div><div class="payment-detail">${story('구현한 범위','주문번호·가격 기반 파라미터와 서명을 구성하고, 인증 응답 확인부터 승인 요청과 결제 이력 저장까지 연결했습니다.')}<aside class="transaction-exception"><h2>예외 시 망취소 호출</h2><p>승인 응답을 처리하는 특정 예외 구간에서 망취소 API를 호출하도록 구성했습니다.</p></aside></div>${closing('중복 처리 방지와 승인·저장 실패 복구는 후속 개선 과제입니다.')}`;
+ case 'transaction': return `<div class="payment-sequence">${stages([['결제 요청','주문·가격 정보와 요청 서명'],['인증 확인','응답 코드·승인 URL 검증'],['승인 호출','PG 승인 API 응답 처리'],['이력 저장','회원·상품·거래 정보 연결']])}</div><div class="payment-detail">${story('구현한 범위','주문번호·가격으로 서명을 구성하고, 인증 확인 → 승인 요청 → 결제 이력 저장을 연결했습니다.')}<aside class="transaction-exception"><h2>예외 시 망취소 호출</h2><p>승인 응답을 처리하는 특정 예외 구간에서 망취소 API를 호출하도록 구성했습니다.</p></aside></div>${closing('중복 처리 방지와 승인·저장 실패 복구는 후속 개선 과제입니다.')}`;
  case 'stateDemo': return `<div class="demo-introduction"><p><strong>10문항</strong>씩 표시하고, 문항 번호별 선택값을 저장·복원했습니다.</p></div><section class="response-demo" data-ui aria-label="응답 유지 동작 원리 데모"><div class="demo-heading"><div><h2>선택하고 화면을 바꿔보세요.</h2><p class="demo-caption">예시 4문항 · 응답 전송·채점 없음</p></div><span id="demoPageLabel">${demoState.page+1} / 2</span></div><div id="demoQuestions">${demoQuestions()}</div><div class="demo-toolbar"><button type="button" data-demo-page="0" ${demoState.page===0?'disabled':''}>이전 묶음</button><span id="demoCount" role="status">${Object.keys(demoState.answers).length} / 4 응답</span><button type="button" data-demo-page="1" ${demoState.page===1?'disabled':''}>다음 묶음</button></div><p id="demoFeedback" class="demo-feedback" role="status">선택한 응답은 화면을 바꾸어도 유지됩니다.</p></section><div class="demo-footnote"><p>실무: localStorage · 데모: 메모리 저장, 새로고침 시 초기화</p></div>`;
  case 'board': return `<div class="board-intro"><h2>게시글의 전체 흐름을 연결했습니다.</h2><p>공지·문의의 목록과 상세 조회부터 작성·수정·삭제까지 화면 요청과 서버 처리를 연결했습니다.</p></div><dl class="board-actions"><div><dt>등록</dt><dd>제목·내용 등 요청값을 구성한 뒤 저장</dd></div><div><dt>조회</dt><dd>목록과 상세 데이터 연결</dd></div><div><dt>수정·삭제</dt><dd>선택한 게시글의 데이터 처리</dd></div><div><dt>페이지 구분</dt><dd>전체 조회 후 JavaScript로 <strong>20개씩</strong> 표시</dd></div></dl>${closing('전체 조회 후 화면에서 20개씩 구분했습니다. 서버 페이지네이션은 개선 과제입니다.')}`;
  case 'reflection':return `<div class="reflection-table"><table><caption class="sr-only">현재 구현과 향후 개선 방향 비교</caption><thead><tr><th scope="col">검토 영역</th><th scope="col">현재 구현</th><th scope="col">다음 개선 방향</th></tr></thead><tbody>${[['응답 상태','문항별 선택값 저장','응시 단위 분리·복수 선택 복원'],['점수 검증','브라우저 점수 집계','서버 검증·최종 점수 계산'],['결제 정합성','성공 이력·예외 망취소','중복 방지·실패 상태 추적'],['조회 구조','전체 조회·화면 구분','서버 페이지네이션 검토']].map(row=>`<tr><th scope="row">${row[0]}</th><td>${row[1]}</td><td>${row[2].replace('서버 검증','<strong>서버 검증</strong>').replace('중복 방지','<strong>중복 방지</strong>')}</td></tr>`).join('')}</tbody></table></div>${closing('향후 개선 계획이며 아직 완료한 성과는 아닙니다.')}`;
@@ -819,9 +819,13 @@ let flowPlaying=false;
 let flowStep=0;
 let revealObserver=null;
 const reducedMotion=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-function renderLiveFlow(){
- return `<section class="live-flow" aria-labelledby="liveFlowTitle"><div class="live-flow-heading"><h2 id="liveFlowTitle">응답이 결과가 되는 과정</h2><button type="button" class="flow-play" data-flow-play aria-pressed="false" aria-label="자동 흐름 일시정지"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg><span>일시정지</span></button></div><div class="flow-track" role="group" aria-label="처리 단계를 선택해 설명 보기"><div class="flow-line" aria-hidden="true"><span id="flowProgress"></span></div>${flowStages.map((step,i)=>`<button type="button" data-flow-step="${i}" aria-pressed="${i===0}" aria-controls="flowDetail"><span class="flow-node" aria-hidden="true"></span><strong>${step.title}</strong><span>${step.meta}</span></button>`).join('')}</div><div class="flow-detail" id="flowDetail" aria-live="off"><h3>화면의 선택을 문항 번호와 연결합니다.</h3><button type="button" data-index="8">${flowStages[0].link}${arrowIcon}</button></div><p class="flow-disclosure">실무 흐름을 재구성한 도식 · 실제 API 호출 없음</p></section><div class="more-work"><button type="button" data-index="5">결제 연동 ${arrowIcon}</button><button type="button" data-index="7">리포트 출력 ${arrowIcon}</button></div>`;
+function renderSkillLandscape(content){
+ return `<div class="skill-landscape"><section class="skill-lane backend-lane"><h2>Java <span>Spring MVC</span></h2><p>요청 처리 · 서비스 로직</p><small>전자정부프레임워크 · MyBatis</small></section><section class="skill-lane data-lane"><h2>MyBatis <span>MySQL</span></h2><p>회원별 결과 저장 · 데이터 조회</p><small>커리어넷 · KG이니시스 · CLIP report</small></section><section class="skill-lane view-lane"><h2>JSP <span>JavaScript</span></h2><p>입력과 응답 상태 · 비동기 전송</p><small>jQuery · HTML · CSS · AJAX</small></section></div><p class="skills-learning"><span>교육 과정</span> Java·Spring 웹 개발 · OracleDB · Tomcat <span>2022.08 — 2023.02</span></p>`;
 }
+function renderLiveFlow(){
+ return `<section class="signature-flow" aria-labelledby="liveFlowTitle"><div class="live-flow-heading"><h2 id="liveFlowTitle">입력이 결과로 이어지는 과정</h2><button type="button" class="flow-play" data-flow-play aria-pressed="false" aria-label="자동 흐름 일시정지"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg><span>일시정지</span></button></div><div class="flow-track signature-track" role="group" aria-label="응답 처리 단계를 선택해 설명 보기"><svg class="signature-wires" viewBox="0 0 620 380" preserveAspectRatio="none" aria-hidden="true"><path class="wire-guide" d="M70 300H150V225H230H310V150H390H470V75H550"/><circle id="flowPacket" cx="0" cy="0" r="7"/></svg>${flowStages.map((step,i)=>`<button type="button" data-flow-step="${i}" aria-pressed="${i===0}" aria-controls="flowDetail"><span class="flow-node" aria-hidden="true"></span><strong>${step.title}</strong><span>${step.meta}</span></button>`).join('')}</div><div class="flow-detail" id="flowDetail" aria-live="off"><h3>화면의 선택을 문항 번호와 연결합니다.</h3><button type="button" data-index="8">${flowStages[0].link}${arrowIcon}</button></div><p class="flow-disclosure">실무 흐름 재구성 · 실제 API 호출 없음</p></section>`;
+}
+
 function updateFlowPlayback(){
  const button=document.querySelector('[data-flow-play]');if(!button)return;
  button.setAttribute('aria-pressed',String(flowPlaying));
@@ -835,17 +839,20 @@ function stopLiveFlow(){
 }
 function setFlowStep(index,{instant=false}={}){
  const detail=document.querySelector('#flowDetail');if(!detail)return;
- flowStep=index;const step=flowStages[index];
+ const previous=flowStep;flowStep=index;const step=flowStages[index];
  const headlines=['화면의 선택을 문항 번호와 연결합니다.','화면이 바뀌어도 응답은 유지됩니다.','검사별 요청 규격에 맞춰 변환합니다.','결과 URL을 회원의 검사 기록에 저장합니다.'];
  document.querySelectorAll('[data-flow-step]').forEach((button,i)=>{button.setAttribute('aria-pressed',String(i===index));button.classList.toggle('is-complete',i<index);});
  detail.innerHTML=`<h3>${headlines[index]}</h3><button type="button" data-index="${step.index}">${safe(step.link)}${arrowIcon}</button>`;
- const progress=document.querySelector('#flowProgress');const from=getComputedStyle(progress).transform;
- progress.getAnimations().forEach(a=>a.cancel());progress.style.transform=`scaleX(${index/3})`;
+ const points=[[70,300],[230,225],[390,150],[550,75]],marker=document.querySelector('#flowPacket');
+ const [x,y]=points[index];marker.getAnimations().forEach(animation=>animation.cancel());marker.style.transform=`translate(${x}px,${y}px)`;
  if(!instant&&!reducedMotion()){
-  progress.animate([{transform:from},{transform:`scaleX(${index/3})`}],{duration:500,easing:'cubic-bezier(.23,1,.32,1)'});
-  detail.animate([{opacity:.35,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:220,easing:'cubic-bezier(.23,1,.32,1)'});
+  const [px,py]=points[previous];const bend=(px+x)/2;
+  const frames=previous===index-1?[{transform:`translate(${px}px,${py}px)`},{transform:`translate(${bend}px,${py}px)`},{transform:`translate(${bend}px,${y}px)`},{transform:`translate(${x}px,${y}px)`}]:[{opacity:.2},{opacity:1}];
+  marker.animate(frames,{duration:900,easing:'cubic-bezier(.77,0,.175,1)'});
+  detail.animate([{opacity:.3,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:220,easing:'cubic-bezier(.23,1,.32,1)'});
  }
 }
+
 function startLiveFlow(){
  if(flowPlaying||!document.querySelector('#flowDetail')||document.hidden)return;
  flowPlaying=true;updateFlowPlayback();
@@ -863,18 +870,18 @@ function animateView({instant,direction=1}){
  revealObserver?.disconnect();revealObserver=null;
  if(instant||reducedMotion())return;
  const easing='cubic-bezier(.23,1,.32,1)';
- slideEl.animate([{opacity:.45,transform:`translateX(${direction*18}px)`},{opacity:1,transform:'translateX(0)'}],{duration:280,easing});
+ slideEl.animate([{opacity:.3,transform:`translate3d(${direction*36}px,0,-50px) rotateY(${-direction*4}deg) scale(.985)`},{opacity:1,transform:'translate3d(0,0,0) rotateY(0) scale(1)'}],{duration:520,easing});
  const parts=[slideEl.querySelector('.portfolio-slide-header'),...slideEl.querySelector('.portfolio-slide-body').children];
  revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
   if(!entry.isIntersecting)return;
-  entry.target.animate([{opacity:.35,transform:'translateY(14px)'},{opacity:1,transform:'translateY(0)'}],{duration:280,easing});
-  revealObserver.unobserve(entry.target);
+  entry.target.animate([{opacity:.3,transform:'translateY(16px)'},{opacity:1,transform:'translateY(0)'}],{duration:420,easing});revealObserver.unobserve(entry.target);
  }),{threshold:.12});
  parts.forEach((part,index)=>{
-  if(part.getBoundingClientRect().top<window.innerHeight-40)part.animate([{opacity:.35,transform:'translateY(14px)'},{opacity:1,transform:'translateY(0)'}],{duration:280,delay:Math.min(index*60,180),easing,fill:'backwards'});
+  if(part.getBoundingClientRect().top<innerHeight-40)part.animate([{opacity:.3,transform:'translateY(16px)'},{opacity:1,transform:'translateY(0)'}],{duration:420,delay:Math.min(index*80,180),easing,fill:'backwards'});
   else revealObserver.observe(part);
  });
 }
+
 document.addEventListener('click',event=>{
  const step=event.target.closest('[data-flow-step]');
  if(step){stopLiveFlow();setFlowStep(Number(step.dataset.flowStep),{instant:isKeyboardInteraction});}
@@ -1168,6 +1175,8 @@ function renderSlide({ instant = isKeyboardInteraction } = {}) {
   const direction=displayedIndex===null||currentIndex>=displayedIndex?1:-1;
   stopLiveFlow();
   const slide = slides[currentIndex];
+  document.body.classList.toggle('is-keyboard-nav',instant);
+  document.body.dataset.tone=['experience','workflow'].includes(slide.id)?'dark':'light';
   const crafted = craftedTypes.has(slide.content.type);
   document.querySelector('.portfolio-slide-stage').classList.toggle('is-crafted', crafted);
   slideEl.className = `portfolio-slide-card case-${slide.id} portfolio-slide-${slide.variant || 'default'}${crafted ? ' portfolio-slide-crafted' : ''}${instant ? ' is-instant' : ''}`;
@@ -1181,6 +1190,7 @@ function renderSlide({ instant = isKeyboardInteraction } = {}) {
         <h1>${titleMarkup(slide)}</h1>
 
         <p>${slide.subtitle}</p>
+        ${slide.id==='cover'?'<div class="cover-signature"><strong>송다원</strong><span>Java · Spring MVC · MyBatis</span></div>':''}
       </div>
     </header>
     <div class="portfolio-slide-body">${renderContent(slide)}</div>
@@ -1203,6 +1213,7 @@ function renderSlide({ instant = isKeyboardInteraction } = {}) {
 
   animateView({instant,direction});
   displayedIndex=currentIndex;
+  const track=document.querySelector('#deckProgress');track.style.transition=instant||reducedMotion()?'none':'';track.style.transform=`scaleX(${(currentIndex+1)/slides.length})`;
   if(slide.id==='cover'){flowStep=0;if(!reducedMotion())startLiveFlow();else updateFlowPlayback();}
 }
 
