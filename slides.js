@@ -762,19 +762,47 @@ const slides = [
   }
 ];
 
+const caseTitles={
+ cover:['입력에서 결과까지','흐름을 연결합니다.'],
+ experience:['기능을 넘어','서비스의 흐름'],
+ skills:['실무에서','사용한 기술'],
+ request:['화면 요청을','저장·조회로'],
+ data:['회원별로 남기는','검사 결과'],
+ payment:['결제의 핵심은','승인과 저장'],
+ oauth:['인증 이후의','회원 처리'],
+ report:['사용자 데이터가','리포트로'],
+ psychology:['화면이 바뀌어도','응답은 그대로'],
+ format:['저장된 응답을','API의 언어로'],
+ board:['등록부터 수정까지','게시글의 흐름'],
+ reflection:['현재의 구현,','다음의 개선'],
+ workflow:['초안은 도구로,','판단은 직접'],
+ closing:['다음 흐름을','함께 만들겠습니다']
+};
+function titleMarkup(slide){const words=caseTitles[slide.id];return `<span class="title-context">${safe(words[0])}</span> <strong class="title-focus">${safe(words[1])}</strong>`;}
+function emphasize(text){
+ let result=safe(text);
+ const terms=['입력·전송·저장·조회','심리검사 응답 처리','내부 데이터와 외부 시스템','문항 번호별 선택값','요구사항에 맞게 수정','벤더 문의','망취소 API','결제 이력 저장'];
+ for(const term of terms)result=result.replace(safe(term),`<mark class="meaning-emphasis">${safe(term)}</mark>`);
+ return result;
+}
+function renderTransformation(){
+ return `<div class="conversion-graph" role="group" aria-label="저장한 예시 응답을 검사별 전달 형식으로 바꾸는 구조"><section class="conversion-source"><h2>저장된 응답</h2><div class="answer-object"><span>문항 1</span><code>["01", "02"]</code><p>문항별 선택값</p></div><p class="conversion-caption">규칙 설명을 위한<br>예시 데이터</p></section><section class="conversion-engine"><h2>formatAnswers</h2><p>검사 식별값으로 분기</p><dl><div><dt>문항 번호</dt><dd>검사별 <strong>접두어</strong></dd></div><div><dt>선택값</dt><dd>앞자리 <strong>0 제거</strong></dd></div><div><dt>구분자</dt><dd>공백 또는 <strong>쉼표</strong></dd></div><div><dt>복수 응답</dt><dd>해당 문항의 <strong>선택값 결합</strong></dd></div></dl></section><section class="conversion-output"><h2>검사별 전달 형식</h2><div><span>검사 6</span><code><mark>B</mark>1=01 02</code></div><div><span>검사 20·21</span><code>1=<mark>1 2</mark></code></div><div><span>검사 8·9·10</span><code>1<mark>,</mark>2</code></div></section></div><div class="conversion-handoff"><span>변환된 응답</span>${arrowIcon}<span>Java 서버</span>${arrowIcon}<strong>커리어넷 API</strong>${arrowIcon}<span>결과 URL 저장</span></div><p class="conversion-scope">변환은 직접 구현하고, <strong>채점은 외부 API</strong>에 요청했습니다.</p>`;
+}
+
 const arrowIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>';
 function renderEditorial(slide) {
  const c=slide.content;
  switch(c.type) {
  case 'cover': return `<div class="intro-summary"><p>Java·Spring MVC로 심리검사·결제·인증·리포트를 구현한 송다원입니다.</p><button class="primary-action" type="button" data-index="8">응답 유지 사례 보기 ${arrowIcon}</button></div>${renderLiveFlow()}`;
- case 'dashboard': return `<div class="experience-record"><div class="employment"><h2>에듀인테크</h2><p>개발팀</p><span>2023.08 — 2025.09</span></div><div class="experience-scope">${c.cards.map((card,i)=>`<section><h2>${['서비스 기능 구현','화면부터 서버까지','외부 시스템 연동'][i]}</h2><p>${safe(card.text)}</p><span>${card.tags.map(safe).join(' · ')}</span></section>`).join('')}</div></div><p class="experience-stack">주요 실무 환경 <strong>Java · Spring MVC · MyBatis · MySQL</strong></p>`;
+ case 'transform': return renderTransformation();
+ case 'dashboard': return `<div class="experience-record"><div class="employment"><h2>에듀인테크</h2><p>개발팀</p><span>2023.08 — 2025.09</span></div><div class="experience-scope">${c.cards.map((card,i)=>`<section><h2>${['서비스 기능 구현','화면부터 서버까지','외부 시스템 연동'][i]}</h2><p>${emphasize(card.text)}</p><span>${card.tags.map(safe).join(' · ')}</span></section>`).join('')}</div></div><p class="experience-stack">주요 실무 환경 <strong>Java · Spring MVC · MyBatis · MySQL</strong></p>`;
  case 'skillMap': return `<div class="skill-ledger"><table><caption class="sr-only">실무 기술과 사용 맥락</caption><thead><tr><th scope="col">사용 영역</th><th scope="col">기술</th><th scope="col">구현에 사용한 맥락</th></tr></thead><tbody>${c.areas.slice(0,3).map((area,i)=>`<tr><th scope="row">${['서버 처리','화면과 상태','데이터와 외부 연동'][i]}</th><td>${area.items.map(item=>`<span class="skill-item">${safe(item)}</span>`).join('')}</td><td>${['요청 수신과 서비스·Mapper 연결','화면 입력과 문항별 응답 유지','결과 저장·결제·인증·출력 연동'][i]}</td></tr>`).join('')}</tbody></table></div><section class="education-note"><h2>교육 과정에서 학습한 기술</h2><p>Java·Spring 웹 개발, OracleDB, Tomcat</p><span>2022.08 — 2023.02</span></section>`;
  case 'architecture': return `<div class="request-system">${stages([['화면 요청','JSP · JavaScript · AJAX'],['서버 처리','Spring MVC Controller'],['데이터 접근','Service · MyBatis Mapper'],['저장·조회','MySQL → 결과 화면']])}</div><div class="story-pair">${story('기능을 끝까지 연결',c.originalItems[0].text)}${story('기존 구조를 이해하며 구현','컨트롤러·서비스·Mapper의 호출 흐름을 파악하고 데이터 수신, 외부 연동과 저장을 기능별로 연결했습니다.')}</div>${closing('JSP 요청부터 Spring MVC·MyBatis를 거쳐 MySQL 저장·조회까지 연결했습니다.')}`;
  case 'transaction': return `<div class="payment-sequence">${stages([['결제 요청','주문·가격 정보와 요청 서명'],['인증 확인','응답 코드·승인 URL 검증'],['승인 호출','PG 승인 API 응답 처리'],['이력 저장','회원·상품·거래 정보 연결']])}</div><div class="payment-detail">${story('구현한 범위','주문번호·가격 기반 파라미터와 서명을 구성하고, 인증 응답 확인부터 승인 요청과 결제 이력 저장까지 연결했습니다.')}<aside class="transaction-exception"><h2>예외 시 망취소 호출</h2><p>승인 응답을 처리하는 특정 예외 구간에서 망취소 API를 호출하도록 구성했습니다.</p></aside></div>${closing('중복 처리 방지와 승인·저장 실패 복구는 후속 개선 과제입니다.')}`;
- case 'stateDemo': return `<div class="demo-introduction"><p>10문항씩 표시하고, 문항 번호별 선택값을 저장·복원했습니다.</p></div><section class="response-demo" data-ui aria-label="응답 유지 동작 원리 데모"><div class="demo-heading"><div><h2>선택하고 화면을 바꿔보세요.</h2><p class="demo-caption">예시 4문항 · 응답 전송·채점 없음</p></div><span id="demoPageLabel">${demoState.page+1} / 2</span></div><div id="demoQuestions">${demoQuestions()}</div><div class="demo-toolbar"><button type="button" data-demo-page="0" ${demoState.page===0?'disabled':''}>이전 묶음</button><span id="demoCount" role="status">${Object.keys(demoState.answers).length} / 4 응답</span><button type="button" data-demo-page="1" ${demoState.page===1?'disabled':''}>다음 묶음</button></div><p id="demoFeedback" class="demo-feedback" role="status">선택한 응답은 화면을 바꾸어도 유지됩니다.</p></section><div class="demo-footnote"><p>실무: localStorage · 데모: 메모리 저장, 새로고침 시 초기화</p></div>`;
- case 'board': return `<div class="board-intro"><h2>게시글의 전체 흐름을 연결했습니다.</h2><p>공지·문의의 목록과 상세 조회부터 작성·수정·삭제까지 화면 요청과 서버 처리를 연결했습니다.</p></div><dl class="board-actions"><div><dt>등록</dt><dd>제목·내용 등 요청값을 구성한 뒤 저장</dd></div><div><dt>조회</dt><dd>목록과 상세 데이터 연결</dd></div><div><dt>수정·삭제</dt><dd>선택한 게시글의 데이터 처리</dd></div><div><dt>페이지 구분</dt><dd>전체 조회 후 JavaScript로 20개씩 표시</dd></div></dl>${closing('전체 조회 후 화면에서 20개씩 구분했습니다. 서버 페이지네이션은 개선 과제입니다.')}`;
- case 'reflection':return `<div class="reflection-table"><table><caption class="sr-only">현재 구현과 향후 개선 방향 비교</caption><thead><tr><th scope="col">검토 영역</th><th scope="col">현재 구현</th><th scope="col">다음 개선 방향</th></tr></thead><tbody>${[['응답 상태','문항별 선택값 저장','응시 단위 분리·복수 선택 복원'],['점수 검증','브라우저 점수 집계','서버 검증·최종 점수 계산'],['결제 정합성','성공 이력·예외 망취소','중복 방지·실패 상태 추적'],['조회 구조','전체 조회·화면 구분','서버 페이지네이션 검토']].map(row=>`<tr><th scope="row">${row[0]}</th><td>${row[1]}</td><td>${row[2]}</td></tr>`).join('')}</tbody></table></div>${closing('향후 개선 계획이며 아직 완료한 성과는 아닙니다.')}`;
- case 'aiTools':return `<div class="tooling-notes">${c.cards.map((card,i)=>`<section><h2>${['먼저, 규격과 기존 코드 확인','초안은 도구로, 판단은 직접','불명확하면 문서 밖에서 확인'][i]}</h2><p>${safe(card.text)}</p></section>`).join('')}</div><ol class="tooling-process">${c.workflow.map(step=>`<li>${safe(step)}</li>`).join('')}</ol>`;
+ case 'stateDemo': return `<div class="demo-introduction"><p><strong>10문항</strong>씩 표시하고, 문항 번호별 선택값을 저장·복원했습니다.</p></div><section class="response-demo" data-ui aria-label="응답 유지 동작 원리 데모"><div class="demo-heading"><div><h2>선택하고 화면을 바꿔보세요.</h2><p class="demo-caption">예시 4문항 · 응답 전송·채점 없음</p></div><span id="demoPageLabel">${demoState.page+1} / 2</span></div><div id="demoQuestions">${demoQuestions()}</div><div class="demo-toolbar"><button type="button" data-demo-page="0" ${demoState.page===0?'disabled':''}>이전 묶음</button><span id="demoCount" role="status">${Object.keys(demoState.answers).length} / 4 응답</span><button type="button" data-demo-page="1" ${demoState.page===1?'disabled':''}>다음 묶음</button></div><p id="demoFeedback" class="demo-feedback" role="status">선택한 응답은 화면을 바꾸어도 유지됩니다.</p></section><div class="demo-footnote"><p>실무: localStorage · 데모: 메모리 저장, 새로고침 시 초기화</p></div>`;
+ case 'board': return `<div class="board-intro"><h2>게시글의 전체 흐름을 연결했습니다.</h2><p>공지·문의의 목록과 상세 조회부터 작성·수정·삭제까지 화면 요청과 서버 처리를 연결했습니다.</p></div><dl class="board-actions"><div><dt>등록</dt><dd>제목·내용 등 요청값을 구성한 뒤 저장</dd></div><div><dt>조회</dt><dd>목록과 상세 데이터 연결</dd></div><div><dt>수정·삭제</dt><dd>선택한 게시글의 데이터 처리</dd></div><div><dt>페이지 구분</dt><dd>전체 조회 후 JavaScript로 <strong>20개씩</strong> 표시</dd></div></dl>${closing('전체 조회 후 화면에서 20개씩 구분했습니다. 서버 페이지네이션은 개선 과제입니다.')}`;
+ case 'reflection':return `<div class="reflection-table"><table><caption class="sr-only">현재 구현과 향후 개선 방향 비교</caption><thead><tr><th scope="col">검토 영역</th><th scope="col">현재 구현</th><th scope="col">다음 개선 방향</th></tr></thead><tbody>${[['응답 상태','문항별 선택값 저장','응시 단위 분리·복수 선택 복원'],['점수 검증','브라우저 점수 집계','서버 검증·최종 점수 계산'],['결제 정합성','성공 이력·예외 망취소','중복 방지·실패 상태 추적'],['조회 구조','전체 조회·화면 구분','서버 페이지네이션 검토']].map(row=>`<tr><th scope="row">${row[0]}</th><td>${row[1]}</td><td>${row[2].replace('서버 검증','<strong>서버 검증</strong>').replace('중복 방지','<strong>중복 방지</strong>')}</td></tr>`).join('')}</tbody></table></div>${closing('향후 개선 계획이며 아직 완료한 성과는 아닙니다.')}`;
+ case 'aiTools':return `<div class="tooling-notes">${c.cards.map((card,i)=>`<section><h2>${['먼저, 규격과 기존 코드 확인','초안은 도구로, 판단은 직접','불명확하면 문서 밖에서 확인'][i]}</h2><p>${emphasize(card.text)}</p></section>`).join('')}</div><ol class="tooling-process">${c.workflow.map(step=>`<li>${safe(step)}</li>`).join('')}</ol>`;
  case 'thanks':return `<div class="closing-statement"><p>${c.message.map(safe).join('<br>')}</p><div class="closing-actions"><a href="https://github.com/SleeveStar/Portfolio" target="_blank" rel="noopener noreferrer">포트폴리오 소스 보기 ${arrowIcon}</a><button type="button" data-index="8">구현 사례 다시 보기 ${arrowIcon}</button></div></div>`;
  }
  return null;
@@ -866,7 +894,7 @@ window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',
 const craftedTypes=new Set(['architecture','dataModel','transaction','branch','report','stateDemo','transform','board','reflection']);
 const demoState={page:0,answers:{}};
 const safe=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-const story=(title,text)=>`<section class="craft-story"><h2>${safe(title)}</h2><p>${safe(text)}</p></section>`;
+const story=(title,text)=>`<section class="craft-story"><h2>${safe(title)}</h2><p>${emphasize(text)}</p></section>`;
 const closing=text=>`<p class="craft-takeaway">${safe(text)}</p>`;
 const node=(name,detail,kind='')=>`<div class="craft-node ${kind}"><strong>${safe(name)}</strong><span>${safe(detail)}</span></div>`;
 const stages=items=>`<ol class="craft-spine">${items.map(([title,text])=>`<li><strong>${safe(title)}</strong><p>${safe(text)}</p></li>`).join('')}</ol>`;
@@ -1150,7 +1178,7 @@ function renderSlide({ instant = isKeyboardInteraction } = {}) {
 
       <div>
         ${slide.role ? `<span class="portfolio-slide-role">${slide.role}</span>` : ""}
-        <h1>${slide.id === "cover" ? "입력에서 결과까지<br>흐름을 연결합니다." : slide.id === "closing" ? "다음 흐름을 함께<br>만들고 싶습니다." : safe(slide.title)}</h1>
+        <h1>${titleMarkup(slide)}</h1>
 
         <p>${slide.subtitle}</p>
       </div>
