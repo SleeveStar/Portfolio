@@ -1,224 +1,176 @@
+"use strict";
+
+// Descriptions reflect the reviewed implementation and the developer's stated role.
+// Reflection items describe future work, not completed improvements.
 const slides = [
   {
-    chapter: "Cover",
-    title: "Java Backend Developer",
-    name: "송다원",
-    subtitle: "안녕하세요. 백엔드와 서버 개발을 중심으로 웹 서비스 기능을 구현하는 개발자 송다원입니다.",
-    label: "Java Backend Portfolio",
-    variant: "cover",
+    id: "cover", title: "사용자의 입력을\n서비스의 결과로 연결합니다.", variant: "cover",
+    subtitle: "Java 백엔드 개발자 송다원입니다. 웹 서비스의 데이터 처리와 외부 API 연동을 담당하고, 필요한 화면까지 구현했습니다.",
     content: {
       type: "cover",
-      keywords: ["Java", "Spring Framework", "MyBatis", "Oracle", "MySQL", "Git"],
-      metrics: [
-        { value: "Java", label: "Backend" },
-        { value: "Spring", label: "Framework" },
-        { value: "SQL", label: "Oracle / MySQL" },
-        { value: "Git", label: "Version Control" }
+      introduction: "에듀인테크 개발팀 · 2023.08 – 2025.09",
+      description: "심리검사의 응답 유지와 데이터 변환부터 결제 승인, 회원 로그인, 결과 조회와 리포트 출력까지. 실제 담당한 기능을 구현 흐름 중심으로 소개합니다.",
+      tags: ["Java", "Spring MVC", "MyBatis", "MySQL", "JSP · jQuery"],
+      links: [{ id: "psychology", text: "대표 사례 읽기" }, { id: "experience", text: "담당 업무 보기" }]
+    }
+  },
+  {
+    id: "experience", title: "주요 기능 개발과\n운영 대응을 맡았습니다.",
+    subtitle: "에듀인테크 개발팀 사원 | 교육·진로 관련 웹 서비스 개발 및 유지보수",
+    content: {
+      type: "overview",
+      facts: [
+        { title: "업무 범위", text: "백엔드 중심의 기능 개발. JSP·JavaScript·jQuery 화면 구현 병행." },
+        { title: "담당 환경", text: "선임 퇴사 이후 주요 기능 개발과 운영 대응. 기존 코드와 DB 구조를 파악해 요구사항 반영." },
+        { title: "문제 해결 방식", text: "기존 구현과 공식 문서를 확인하고, 불명확한 연동 규격은 벤더 문의로 확인." }
+      ],
+      rows: [
+        ["심리검사", "응답 상태 관리, 검사별 데이터 변환, 외부 API와 결과 이력 연결"],
+        ["결제·로그인", "KG이니시스 승인 응답 처리, 카카오·네이버 인증과 회원 분기"],
+        ["운영·출력", "공지·문의 CRUD, 화면 페이지네이션, 포트폴리오 리포트 연동"]
       ]
     }
   },
   {
-    chapter: "Profile Dashboard",
-    title: "Backend Capability Snapshot",
-    subtitle: "운영 기능 구현, 데이터 처리, 외부 연동 경험을 백엔드 업무 흐름 기준으로 정리했습니다.",
-    label: "Capability",
+    id: "skills", title: "기술을 사용한 맥락", subtitle: "실무에서 사용한 기술과 교육에서 학습한 기술을 구분했습니다.",
     content: {
-      type: "dashboard",
-      metrics: [
-        { value: "Java", label: "Primary Language" },
-        { value: "Spring", label: "Backend Framework" },
-        { value: "MyBatis", label: "Persistence Layer" },
-        { value: "Oracle / MySQL", label: "Database" }
+      type: "skills",
+      groups: [
+        { title: "서버 · 실무", items: ["Java · Spring MVC", "전자정부프레임워크", "RestTemplate을 통한 외부 API 호출"] },
+        { title: "데이터 · 실무", items: ["MyBatis Mapper", "MySQL 데이터 조회·저장", "회원·검사 결과·결제 이력 연결"] },
+        { title: "화면 · 실무", items: ["JSP · HTML/CSS", "JavaScript · jQuery · AJAX", "localStorage 응답 상태 관리"] },
+        { title: "교육 · 학습", items: ["Java·Spring 웹 개발 교육", "OracleDB · Tomcat", "2022.08 – 2023.02"] }
       ],
-      cards: [
-        {
-          title: "Service Logic",
-          text: "요청 검증, 서비스 로직, 응답 흐름을 계층별로 분리해 구현합니다.",
-          tags: ["Controller", "Service", "Validation"]
-        },
-        {
-          title: "Operation Data",
-          text: "CRUD, 검색, 페이징, 결과 산출처럼 운영자가 반복적으로 사용하는 데이터 흐름을 만듭니다.",
-          tags: ["CRUD", "Search", "Pagination"]
-        },
-        {
-          title: "External Workflow",
-          text: "결제, OAuth, 리포트 출력 등 외부 시스템과 내부 데이터를 연결합니다.",
-          tags: ["Payment", "OAuth", "Report"]
-        }
+      note: "실무 서비스는 Spring MVC·MyBatis·MySQL 기반이며, OracleDB와 Tomcat은 웹 개발 교육 과정에서 학습했습니다."
+    }
+  },
+  {
+    id: "psychology", title: "페이지가 바뀌어도\n선택한 응답을 유지하기", subtitle: "심리검사 대표 사례 · JavaScript / jQuery / localStorage",
+    content: {
+      type: "case", task: "문항이 많은 검사를 여러 페이지로 나누면서, 사용자가 이전 페이지로 돌아가 답변을 확인·수정할 수 있어야 했습니다.",
+      sections: [
+        { title: "문항 표시", text: "문항 데이터를 10개씩 나누고 현재 페이지의 시작·끝 인덱스로 표시 범위를 계산했습니다. 이전·다음 이동 시 해당 구간을 다시 렌더링합니다." },
+        { title: "응답 저장·복원", text: "동적으로 생성한 문항의 change 이벤트를 상위 요소에서 처리했습니다. 문항 번호별로 선택값을 localStorage에 저장하고, 단일 선택 문항 표시 시 저장값과 선택지를 비교해 체크 상태를 복원했습니다." }
+      ],
+      flow: ["문항 10개 표시", "선택값 저장", "다른 페이지 이동", "저장 응답 복원"],
+      outcome: "현재 화면에 보이는 입력 요소와 응답 데이터를 분리해, 페이지 이동 중에도 단일 선택 응답을 이어갈 수 있도록 구현했습니다.",
+      evidence: ["psychologicalTestOpenwindow.jsp · displayQuestions / change 이벤트"]
+    }
+  },
+  {
+    id: "answer-format", title: "검사마다 다른 응답을\nAPI 규격에 맞게 변환하기", subtitle: "심리검사 대표 사례 · JSON / Spring MVC / RestTemplate / MyBatis",
+    content: {
+      type: "case", task: "검사 종류에 따라 문항 번호와 응답 문자열의 형식이 달랐습니다. 화면에서 선택한 값을 모아 각 검사 API가 받는 구조로 변환해야 했습니다.",
+      sections: [
+        { title: "응답 형식 변환", text: "저장한 문항별 응답을 수집하고 검사 식별값에 따라 접두어, 응답값의 앞자리 0, 구분자와 복수 응답 형식을 변환하는 formatAnswers 함수를 구현했습니다." },
+        { title: "서버 연동·결과 저장", text: "AJAX로 JSON을 컨트롤러에 전송하고 RestTemplate으로 커리어넷 검사 API에 전달했습니다. 반환된 결과 URL을 회원·검사명·응시일과 함께 저장해 결과 조회 화면으로 연결했습니다." }
+      ],
+      flow: ["응답 수집", "검사별 형식 변환", "Java 서버", "커리어넷 API", "결과 URL 저장"],
+      outcome: "사용자 응답부터 검사 결과 조회까지 흐름을 연결했습니다. 이 경로의 채점과 결과 제공은 커리어넷 API가 수행합니다.",
+      evidence: ["psychologicalTestOpenwindow.jsp · formatAnswers / submitForm", "JinroCommonController.java · getPsychologicalTestResult", "user.xml · insertPsytestResult"]
+    }
+  },
+  {
+    id: "scoring", title: "외부 검사와\n자체 점수 집계의 구분", subtitle: "검사 기능 · JavaScript / Spring MVC / MyBatis",
+    content: {
+      type: "comparison",
+      columns: [
+        { title: "커리어넷 연동 검사", items: ["문항별 응답을 검사 API 규격으로 변환", "Java 서버에서 외부 API 호출", "API가 제공한 결과 URL을 저장·조회"] },
+        { title: "별도 점수 집계 검사", items: ["JavaScript에서 응답값을 영역별로 합산", "미응답 안내 후 영역 점수와 총점 전송", "서버에서 결과를 저장하고 조회 화면 연결"] }
+      ],
+      note: "두 검사 흐름은 계산 주체와 저장 데이터가 다릅니다. 별도 검사의 최종 점수를 서버에서 재계산하는 방식은 이후 보완할 과제로 보고 있습니다.",
+      evidence: ["entrtest.js · 영역별 점수 집계", "psychologicalTestOpenwindow2.jsp · handleSubmit", "JinroCommonController.java · getPsychologicalTestResult2"]
+    }
+  },
+  {
+    id: "payment", title: "결제 요청에서\n승인 결과와 이력 저장까지", subtitle: "KG이니시스 결제 · Java / Spring MVC / JSP / MyBatis",
+    content: {
+      type: "case", task: "상품 결제 요청을 PG 인증·승인 과정과 연결하고, 승인 응답에 따라 서비스의 결제 이력을 처리해야 했습니다.",
+      sections: [
+        { title: "요청·승인 연동", text: "상품 가격과 주문번호를 바탕으로 요청 파라미터와 서명을 구성했습니다. 인증 응답 코드와 승인 요청 URL을 확인한 뒤 승인 API를 호출했습니다." },
+        { title: "응답·예외 처리", text: "결제 성공 응답을 조건으로 회원·상품·거래 정보를 결제 이력에 저장했습니다. 승인 응답 처리 중 예외가 발생하는 구간에는 망취소 API 호출을 연결했습니다." }
+      ],
+      flow: ["주문·요청 구성", "인증 응답 확인", "승인 API 호출", "결과 처리", "성공 건 저장"],
+      outcome: "PG 인증·승인 응답과 내부 결제 이력을 연결하고, 승인 응답 처리 구간의 예외에 대응하는 흐름을 구현했습니다.",
+      evidence: ["StudyCommonController.java · /pay/view.ui · /pay/response.ui", "PaymentServiceImpl.java · insertPayHistory"]
+    }
+  },
+  {
+    id: "oauth", title: "소셜 인증을\n기존 회원 흐름에 연결하기", subtitle: "카카오·네이버 로그인 · OAuth / HTTP Session / MyBatis",
+    content: {
+      type: "case", task: "소셜 제공자에서 받은 사용자 정보를 서비스의 기존 회원 조회와 연결하고, 가입 여부에 맞는 화면으로 이동시켜야 했습니다.",
+      sections: [
+        { title: "제공자 인증 연동", text: "카카오·네이버 인증 과정의 토큰 발급과 사용자 정보 조회를 구현했습니다. 제공자 응답을 서비스 회원 처리에 사용할 정보로 구성했습니다." },
+        { title: "로그인·가입 분기", text: "이메일 정보를 통한 기존 회원 조회 결과에 따라 HTTP Session에 로그인 정보를 구성하거나 신규 가입 화면으로 이동했습니다. 가입에 필요한 정보도 다음 화면으로 전달했습니다." }
+      ],
+      flow: ["제공자 인증", "토큰·사용자 조회", "기존 회원 조회", "로그인 또는 가입"],
+      outcome: "제공자의 인증 결과를 내부 회원 처리에 연결해, 기존 회원의 서비스 진입과 신규 회원의 가입 흐름을 구성했습니다.",
+      evidence: ["SocialController.java · kakaoLogin / naverLogin", "SocialServiceImpl.java · loginProc"]
+    }
+  },
+  {
+    id: "report", title: "사용자 데이터를\n출력 가능한 리포트로", subtitle: "포트폴리오 출력 · CLIP report 4 / CRF / JSP",
+    content: {
+      type: "case", task: "서비스의 포트폴리오 정보를 사용자별로 구분해 리포트 템플릿과 웹 뷰어에 연결해야 했습니다.",
+      sections: [
+        { title: "템플릿·파라미터 연결", text: "CRF 템플릿을 지정하고 사용자 식별 파라미터를 전달했습니다. ReportUtil.createReport로 생성한 리포트 키를 웹 뷰어에 연결했습니다." },
+        { title: "문서·벤더 확인", text: "기존 코드와 공식 가이드를 확인하고, 문서만으로 이해하기 어려운 연동 규격은 벤더 문의로 확인해 구현에 반영했습니다." }
+      ],
+      flow: ["사용자 파라미터", "CRF 템플릿", "리포트 키 생성", "웹 뷰어·출력"],
+      outcome: "사용자별 포트폴리오 출력 흐름을 연동했습니다. 커리어넷 검사 결과의 외부 URL 조회와 별개의 출력 기능입니다.",
+      evidence: ["reportPortfolio.jsp · OOFDocument / addField", "reportPortfolio.jsp · ReportUtil.createReport / createImportJSPReport"]
+    }
+  },
+  {
+    id: "board", title: "공지·문의의\n등록부터 목록 조회까지", subtitle: "게시판 기능 · Controller / Service / MyBatis / JSP",
+    content: {
+      type: "case", task: "운영 공지와 사용자 문의를 등록·조회하고 수정·삭제할 수 있는 게시판 흐름을 구현했습니다.",
+      sections: [
+        { title: "데이터 처리", text: "Controller에서 요청을 받아 Service와 MyBatis Mapper로 게시글을 조회·저장했습니다. 목록·상세·등록·수정·삭제 화면을 연결했습니다." },
+        { title: "목록 표시", text: "조회한 게시글을 JavaScript로 20개씩 나누어 표시했습니다. 현재 사례는 전체 조회 후 화면에서 나누는 방식이며, DB 쿼리 단계의 페이지네이션과 구분합니다." }
+      ],
+      flow: ["작성·수정 화면", "Controller", "Service · Mapper", "DB", "목록·상세"],
+      outcome: "공지·문의의 작성·수정·삭제와 목록·상세 조회를 서비스 화면에서 처리할 수 있도록 연결했습니다.",
+      evidence: ["StudyCommonController.java · noticeBoard / qnaBoard", "board.xml · getNoticeBoardList / getQnaBoardList", "noticeBoardSelectView.jsp · showPage"]
+    }
+  },
+  {
+    id: "reflection", title: "다시 구현한다면\n이 부분부터 보완하겠습니다.", subtitle: "회고 · 아래 항목은 완료한 성과가 아닌 향후 개선 방향입니다.",
+    content: {
+      type: "reflection",
+      rows: [
+        { area: "응답 상태", current: "문항 번호를 키로 저장, 단일 선택값 비교로 복원", next: "검사·응시 단위 저장 범위 분리, 복수 선택을 배열로 일관되게 관리" },
+        { area: "응답·점수 검증", current: "현재 화면 입력 확인, 별도 검사는 브라우저에서 점수 집계", next: "전체 문항과 응답 대조, 서버의 응답 검증과 최종 점수 계산" },
+        { area: "결제 정합성", current: "성공 건 저장과 특정 예외 구간의 망취소 호출", next: "주문·거래 식별 기준의 중복 처리 방지, 승인·저장 실패 상태 추적" },
+        { area: "조회·유지보수", current: "화면 페이지네이션, 컨트롤러에 함께 있는 API 처리", next: "규모에 맞는 서버 조회, 검사별 변환·외부 통신·저장 책임 분리" }
       ]
     }
   },
   {
-    chapter: "Core Skill Map",
-    title: "Core Skill Map",
-    subtitle: "백엔드 중심 역량을 데이터, 연동, 출력 기능까지 확장합니다.",
-    label: "Skill Map",
+    id: "workflow", title: "도구를 활용하되\n구현의 판단은 직접", subtitle: "공식 문서·기존 코드·벤더 소통·AI 보조를 함께 활용했습니다.",
     content: {
-      type: "skillMap",
-      areas: [
-        { title: "Backend / Server", items: ["Java", "Spring Framework", "백엔드/서버개발"] },
-        { title: "View / Frontend", items: ["JSP", "HTML5", "CSS3", "JavaScript", "Ajax"] },
-        { title: "Database / Query", items: ["Oracle", "MySQL", "MyBatis"] },
-        { title: "Collaboration / Tools", items: ["Git", "CRUD 구현", "검색/페이징"] }
+      type: "overview",
+      facts: [
+        { title: "구현 범위 정리", text: "요구사항과 기존 코드 흐름을 확인하고 입력·출력과 외부 연동 규격을 정리했습니다." },
+        { title: "AI 활용", text: "구현 초안과 오류 분석의 보조 수단으로 사용하고, 기존 코드와 요구사항에 맞게 수정했습니다." },
+        { title: "불명확한 규격 확인", text: "문서와 레퍼런스를 먼저 확인하고, 해결하기 어려운 연동 사항은 벤더에 문의했습니다." }
+      ],
+      rows: [
+        ["설명할 수 있는 구현", "응답 저장·복원, 검사별 변환, 승인 응답 처리처럼 실제 처리 흐름을 중심으로 기술"],
+        ["학습과 회고", "현재 구현의 한계를 돌아보고 다음에 적용할 검증·구조 개선 방향을 구분해 기록"]
       ]
     }
   },
   {
-    chapter: "REST API Development",
-    title: "REST API Development",
-    subtitle: "운영자가 사용하는 요청 흐름을 기준으로 API 계층과 예외 흐름을 정리했습니다.",
-    label: "PAAR / API",
-    content: {
-      type: "paar",
-      items: [
-        { key: "P", title: "Problem", text: "요청 처리 로직이 화면/기능별로 흩어지면 검증, 예외 처리, 데이터 저장 흐름을 추적하기 어렵습니다." },
-        { key: "A", title: "Analyze", text: "컨트롤러에 로직을 집중하는 방식과 계층을 분리하는 방식을 비교했고, 유지보수와 테스트 흐름을 고려해 Controller-Service-Mapper 구조를 선택했습니다." },
-        { key: "A", title: "Action", text: "입력값 검증, 서비스 로직, MyBatis Mapper 호출, 응답 반환 흐름을 분리하고 예외 상황을 함께 확인했습니다." },
-        { key: "R", title: "Result", text: "요청부터 DB 처리와 응답까지 흐름을 단계별로 설명할 수 있게 되었고, 기능 수정 시 영향 범위를 더 빠르게 확인할 수 있었습니다." }
-      ],
-      flow: ["Client", "Controller", "Service", "Mapper", "DB", "Response"]
-    }
-  },
-  {
-    chapter: "Database & MyBatis",
-    title: "Database & MyBatis",
-    subtitle: "데이터 구조, 조회 조건, 페이징 요구사항을 기준으로 쿼리 흐름을 설계했습니다.",
-    label: "PAAR / DB",
-    content: {
-      type: "paar",
-      items: [
-        { key: "P", title: "Problem", text: "관리 기능은 데이터가 늘어날수록 목록 조회, 조건 검색, 페이지 이동이 느려지거나 복잡해질 수 있습니다." },
-        { key: "A", title: "Analyze", text: "단순 전체 조회와 조건 기반 쿼리 분리를 비교했고, 운영자가 필요한 데이터만 찾을 수 있도록 검색 조건과 페이징을 쿼리 단계에서 처리하는 방식을 선택했습니다." },
-        { key: "A", title: "Action", text: "테이블 구조를 정리하고 MyBatis Mapper 기반 CRUD, 조건 검색, 페이징 쿼리와 입력값 검증 흐름을 구현했습니다." },
-        { key: "R", title: "Result", text: "목록, 검색, 상세, 수정 흐름을 일관된 데이터 처리 방식으로 연결했고, 화면에서 케이스별 조회 결과를 직접 확인하며 검증했습니다." }
-      ],
-      evidence: ["Data Modeling", "CRUD", "Search", "Pagination"]
-    }
-  },
-  {
-    chapter: "External API Integration",
-    title: "External API Integration",
-    subtitle: "가이드 문서와 반복 테스트를 기반으로 결제·OAuth 연동 흐름을 내부 데이터와 연결했습니다.",
-    label: "PAAR / Integration",
-    content: {
-      type: "paar",
-      items: [
-        { key: "P", title: "Problem", text: "결제와 OAuth는 제공자별 요청값, 콜백 파라미터, 토큰 처리 방식이 달라 문서 흐름을 정확히 따라가지 않으면 연동이 쉽게 끊겼습니다." },
-        { key: "A", title: "Analyze", text: "공식 가이드의 샘플 흐름을 먼저 기준으로 잡고, 프론트에서 처리할 값과 서버에서 검증·저장할 값을 나눠 보며 어떤 지점에서 실패하는지 반복 테스트했습니다." },
-        { key: "A", title: "Action", text: "KG이니시스 결제 요청·승인 결과 처리와 카카오/네이버 OAuth 인가 코드·토큰·사용자 정보 매핑을 구현하고, 케이스별 로그와 DB 저장 결과를 확인했습니다." },
-        { key: "R", title: "Result", text: "가이드 기반으로 요청-콜백-검증-저장 흐름을 정리했고, 정상/실패 케이스를 여러 번 테스트해 화면 전환과 저장 결과가 일치하는지 검증했습니다." }
-      ],
-      flow: ["Guide Check", "Request", "Callback", "Token / Approval", "DB Save", "Test"]
-    }
-  },
-  {
-    chapter: "ClipSoft Report Output",
-    title: "ClipSoft Report Output",
-    subtitle: "ClipSoft 가이드와 유선 문의, AI 도움을 함께 활용해 결과표 출력 흐름을 구현했습니다.",
-    label: "PAAR / Report",
-    content: {
-      type: "paar",
-      items: [
-        { key: "P", title: "Problem", text: "검사 결과 데이터를 화면에 표시하는 것과 리포트 템플릿에 정확히 매핑해 출력하는 것은 처리 방식이 달라, 출력값 누락과 형식 불일치가 발생할 수 있었습니다." },
-        { key: "A", title: "Analyze", text: "ClipSoft 가이드를 중심으로 데이터셋 구성 방식과 템플릿 매핑 방식을 확인했고, 이해가 어려운 부분은 유선 컨택과 AI 도움으로 원인을 좁혔습니다." },
-        { key: "A", title: "Action", text: "DB 결과와 채점 데이터를 리포트 양식에 맞게 가공하고, 미리보기·인쇄·내보내기 과정에서 실제 출력값이 템플릿 위치와 맞는지 반복 확인했습니다." },
-        { key: "R", title: "Result", text: "화면 결과와 출력 결과를 대조하며 누락 데이터를 줄였고, 결과표를 운영자가 바로 확인·인쇄할 수 있는 흐름으로 연결했습니다." }
-      ],
-      flow: ["Guide Study", "Data Mapping", "Phone Check", "AI Support", "Preview", "Print / Export"]
-    }
-  },
-  {
-    chapter: "Psychological Test Module",
-    title: "Psychological Test Module",
-    subtitle: "뷰에서 체크한 응답을 종합해 묶어 보내고, 채점·결과 산출까지 연결하는 과정에서 문제를 해결했습니다.",
-    label: "PAAR / Test",
-    content: {
-      type: "paar",
-      items: [
-        { key: "P", title: "Problem", text: "심리검사 문항에서 체크한 값들을 뷰에서 모두 종합해 한 번에 묶어 보내야 했는데, 응답 구조가 복잡해 누락되거나 원하는 형태로 전달되지 않는 문제가 있었습니다." },
-        { key: "A", title: "Analyze", text: "개별 문항을 따로 전송하는 방식과 화면에서 응답을 모아 구조화한 뒤 보내는 방식을 비교했고, 채점 로직까지 이어지려면 후자가 더 적합하다고 판단했습니다." },
-        { key: "A", title: "Action", text: "웹 검색과 AI 도움으로 체크값 수집 방식을 정리하고, JavaScript에서 응답을 묶어 서버로 전달한 뒤 저장·채점·결과 화면·결과표 출력까지 단계별로 연결했습니다." },
-        { key: "R", title: "Result", text: "응답 데이터가 의도한 구조로 전달되는지 브라우저와 서버 로그, DB 저장값을 비교해 확인했고, 검사 진행부터 결과 출력까지 이어지는 흐름을 검증했습니다." }
-      ],
-      flow: ["체크값 수집", "응답 묶기", "서버 전송", "저장", "채점", "결과 출력"]
-    }
-  },
-  {
-    chapter: "Board & Admin Features",
-    title: "Board & Admin Features",
-    subtitle: "반복적인 운영 업무를 안정적으로 처리할 수 있도록 CRUD와 검색·페이징을 구성했습니다.",
-    label: "PAAR / Admin",
-    content: {
-      type: "paar",
-      items: [
-        { key: "P", title: "Problem", text: "관리자가 반복적으로 사용하는 게시판 기능은 등록, 수정, 검색, 페이징이 분리되어 있으면 운영 효율이 떨어집니다." },
-        { key: "A", title: "Analyze", text: "기본 CRUD만 제공하는 방식과 운영 조건을 함께 반영하는 방식을 비교했고, 실제 관리 화면에서는 검색과 페이징이 핵심이라고 판단했습니다." },
-        { key: "A", title: "Action", text: "등록, 조회, 수정, 삭제 흐름에 조건 검색, 페이지 이동, 요구사항별 필드와 상태 처리를 함께 구현했습니다." },
-        { key: "R", title: "Result", text: "운영자가 필요한 데이터를 빠르게 찾고 수정할 수 있는 관리 흐름을 만들었고, 케이스별 CRUD와 검색 결과를 화면에서 검증했습니다." }
-      ],
-      evidence: ["등록", "조회", "수정", "삭제", "검색", "페이징"]
-    }
-  },
-  {
-    chapter: "Strength & Closing",
-    title: "Strength & Closing",
-    subtitle: "구현 결과가 실제 운영 흐름으로 이어지는 백엔드 개발을 지향합니다.",
-    label: "Closing",
+    id: "closing", title: "함께 만들고 싶은\n다음 서비스", variant: "closing",
+    subtitle: "기존 서비스를 이해하고, 필요한 기능을 연결하며, 운영에서 확인할 수 있는 결과를 만드는 개발자가 되겠습니다.",
     content: {
       type: "closing",
-      cards: [
-        "End-to-End 구현 경험",
-        "운영 기능 중심 개발",
-        "외부 시스템 연동 경험",
-        "데이터 기반 기능 구현"
-      ],
-      message: ["Java와 Spring 기반의 서비스 개발 경험을 바탕으로 안정적인 백엔드 기능 구현에 기여하겠습니다.", "운영 요구사항을 이해하고 데이터와 API 흐름을 함께 개선하는 개발자로 합류하고 싶습니다."]
-    }
-  },
-  {
-    chapter: "AI Tooling",
-    title: "AI-Assisted Development",
-    subtitle: "가이드 문서, 웹 검색, 유선 문의로 확인한 내용을 AI와 함께 정리하며 문제를 해결했습니다.",
-    label: "AI Workflow",
-    content: {
-      type: "aiTools",
-      cards: [
-        {
-          title: "Guide Interpretation",
-          text: "결제, OAuth, ClipSoft처럼 가이드가 중요한 기능은 문서 흐름을 먼저 읽고 필요한 요청값과 응답값을 정리했습니다.",
-          tags: ["Guide", "API Docs", "Parameter"]
-        },
-        {
-          title: "Issue Narrowing",
-          text: "막히는 부분은 웹 검색과 AI를 활용해 가능한 원인을 좁히고, 로그와 테스트 케이스로 실제 원인을 확인했습니다.",
-          tags: ["Search", "AI", "Debugging"]
-        },
-        {
-          title: "External Check",
-          text: "ClipSoft처럼 문서만으로 해결이 어려운 부분은 유선 문의로 확인한 뒤 구현 방향에 반영했습니다.",
-          tags: ["Contact", "Validation", "Apply"]
-        }
-      ],
-      workflow: ["가이드 확인", "선택지 비교", "구현", "오류 확인", "문의/검색", "반복 테스트"]
-    }
-  },
-  {
-    chapter: "Thank You",
-    title: "Thank You.",
-    subtitle: "Java Backend Developer 송다원",
-    label: "Thank You",
-    variant: "thanks",
-    content: {
-      type: "thanks",
-      message: ["운영 가능한 기능을 안정적으로 구현하고,", "데이터와 API 흐름을 개선하는 백엔드 개발자로 성장하겠습니다."],
-      keywords: ["Java", "Spring Framework", "MyBatis", "Oracle", "MySQL", "Git"]
+      paragraphs: ["약 2년의 웹 서비스 개발 경험에서 쌓은 Java·Spring MVC 기반 구현 역량과 외부 시스템 연동 경험을 바탕으로 기여하고 싶습니다.", "앞으로는 입력 검증과 데이터 정합성, 실패 상황의 복구까지 더 체계적으로 설계하고 검증하는 방향으로 성장하겠습니다."],
+      links: [{ id: "experience", text: "담당 경험 다시 보기" }, { id: "psychology", text: "심리검사 사례 보기" }]
     }
   }
 ];
-
-let currentIndex = 0;
-let isWheelLocked = false;
 
 const slideEl = document.querySelector("#slide");
 const prevButton = document.querySelector("#prevSlide");
@@ -226,280 +178,105 @@ const nextButton = document.querySelector("#nextSlide");
 const currentSlideEl = document.querySelector("#currentSlide");
 const totalSlidesEl = document.querySelector("#totalSlides");
 const dotsEl = document.querySelector("#slideDots");
-
+const sectionSelect = document.querySelector("#sectionSelect");
 const pad = (number) => String(number).padStart(2, "0");
+const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
+const paragraphs = (items) => items.map((item) => `<p>${escapeHTML(item)}</p>`).join("");
+const links = (items) => `<div class="case-links">${items.map((item) => `<a href="#${escapeHTML(item.id)}">${escapeHTML(item.text)}</a>`).join("")}</div>`;
+const flow = (steps) => `<ol class="case-flow" aria-label="처리 순서">${steps.map((step) => `<li>${escapeHTML(step)}</li>`).join("")}</ol>`;
+const evidence = (items) => items ? `<details class="case-evidence"><summary>구현 근거 파일</summary><ul>${items.map((item) => `<li>${escapeHTML(item)}</li>`).join("")}</ul></details>` : "";
 
-function renderCards(cards) {
-  return `<div class="portfolio-slide-card-grid">
-    ${cards
-      .map(
-        (card) => `<section class="portfolio-slide-info-card portfolio-slide-accent-${card.accent || "blue"}">
-          <h3>${card.title}</h3>
-          <p>${card.text}</p>
-          <div class="portfolio-slide-tags">${(card.tags || []).map((tag) => `<span>${tag}</span>`).join("")}</div>
-        </section>`
-      )
-      .join("")}
-  </div>`;
+function renderContent({ content }) {
+  switch (content.type) {
+    case "cover":
+      return `<div class="cover-content"><p class="experience-line">${escapeHTML(content.introduction)}</p><p class="cover-description">${escapeHTML(content.description)}</p><ul class="skill-tags" aria-label="주요 기술">${content.tags.map((tag) => `<li>${escapeHTML(tag)}</li>`).join("")}</ul>${links(content.links)}</div>`;
+    case "overview":
+      return `<div class="overview-facts">${content.facts.map((fact) => `<section><h2>${escapeHTML(fact.title)}</h2><p>${escapeHTML(fact.text)}</p></section>`).join("")}</div><dl class="experience-list">${content.rows.map(([title, text]) => `<div><dt>${escapeHTML(title)}</dt><dd>${escapeHTML(text)}</dd></div>`).join("")}</dl>`;
+    case "skills":
+      return `<div class="skills-grid">${content.groups.map((group) => `<section><h2>${escapeHTML(group.title)}</h2><ul>${group.items.map((item) => `<li>${escapeHTML(item)}</li>`).join("")}</ul></section>`).join("")}</div><p class="case-note">${escapeHTML(content.note)}</p>`;
+    case "case":
+      return `<p class="case-task">${escapeHTML(content.task)}</p><div class="case-sections">${content.sections.map((section) => `<section><h2>${escapeHTML(section.title)}</h2><p>${escapeHTML(section.text)}</p></section>`).join("")}</div>${flow(content.flow)}<p class="case-outcome">${escapeHTML(content.outcome)}</p>${evidence(content.evidence)}`;
+    case "comparison":
+      return `<div class="comparison-grid">${content.columns.map((column) => `<section><h2>${escapeHTML(column.title)}</h2><ol>${column.items.map((item) => `<li>${escapeHTML(item)}</li>`).join("")}</ol></section>`).join("")}</div><p class="case-note">${escapeHTML(content.note)}</p>${evidence(content.evidence)}`;
+    case "reflection":
+      return `<div class="reflection-table"><table><caption class="sr-only">현재 구현과 향후 개선 방향</caption><thead><tr><th scope="col">영역</th><th scope="col">현재 구현</th><th scope="col">다음 개선 방향</th></tr></thead><tbody>${content.rows.map((row) => `<tr><th scope="row">${escapeHTML(row.area)}</th><td data-label="현재 구현">${escapeHTML(row.current)}</td><td data-label="다음 개선 방향">${escapeHTML(row.next)}</td></tr>`).join("")}</tbody></table></div>`;
+    case "closing":
+      return `<div class="closing-content">${paragraphs(content.paragraphs)}${links(content.links)}</div>`;
+    default:
+      return "";
+  }
 }
 
-function renderFlow(steps, highlight) {
-  return `<div class="portfolio-slide-flow" style="--flow-count: ${steps.length}">
-    ${steps.map((step, index) => `<div class="portfolio-slide-flow-step"><span class="portfolio-slide-flow-icon" aria-hidden="true" data-step="${pad(index + 1)}"></span><strong>${step}</strong></div>`).join("")}
-  </div>
-  ${highlight ? `<p class="portfolio-slide-highlight">${highlight}</p>` : ""}`;
+function slideMarkup(slide, index, print = false) {
+  const tag = print ? "h2" : "h1";
+  return `<header class="portfolio-slide-header"><${tag}>${escapeHTML(slide.title).replace(/\n/g, "<br>")}</${tag}><p>${escapeHTML(slide.subtitle)}</p></header><div class="portfolio-slide-body">${renderContent(slide)}</div><footer class="portfolio-slide-footer"><span>송다원 · Java Backend</span><span>${pad(index + 1)} / ${pad(slides.length)}</span></footer>`;
 }
 
-function renderDashboard(content) {
-  return `<div class="portfolio-slide-dashboard">
-    <div class="portfolio-slide-dashboard-metrics">
-      ${content.metrics.map((metric) => `<div class="portfolio-slide-dashboard-metric"><strong>${metric.value}</strong><span>${metric.label}</span></div>`).join("")}
-    </div>
-    <div class="portfolio-slide-dashboard-cards">
-      ${content.cards
-        .map(
-          (card) => `<section class="portfolio-slide-dashboard-card">
-            <h3>${card.title}</h3>
-            <p>${card.text}</p>
-            <div class="portfolio-slide-tags">${card.tags.map((tag) => `<span>${tag}</span>`).join("")}</div>
-          </section>`
-        )
-        .join("")}
-    </div>
-  </div>`;
+function getHashIndex() {
+  return slides.findIndex((slide) => `#${slide.id}` === window.location.hash);
 }
 
-function renderPaar(content) {
-  return `<div class="portfolio-slide-paar-layout">
-    <div class="portfolio-slide-paar-grid">
-      ${content.items
-        .map(
-          (item) => `<section class="portfolio-slide-paar-card portfolio-slide-paar-${item.key.toLowerCase()}">
-            <span>${item.key}</span>
-            <h3>${item.title}</h3>
-            <p>${item.text}</p>
-          </section>`
-        )
-        .join("")}
-    </div>
-    ${
-      content.flow
-        ? `<div class="portfolio-slide-paar-flow" style="--flow-count: ${content.flow.length}">${content.flow.map((step, index) => `<span data-step="${pad(index + 1)}">${step}</span>`).join("")}</div>`
-        : ""
-    }
-    ${
-      content.evidence
-        ? `<div class="portfolio-slide-evidence-list">${content.evidence.map((item) => `<span>${item}</span>`).join("")}</div>`
-        : ""
-    }
-  </div>`;
-}
+let currentIndex = Math.max(0, getHashIndex());
 
-function renderTable(headers, rows) {
-  return `<div class="portfolio-slide-table-wrap">
-    <table class="portfolio-slide-table">
-      <thead><tr>${headers.map((header) => `<th>${header}</th>`).join("")}</tr></thead>
-      <tbody>${rows.map((row) => `<tr>${row.map((cell, index) => `<td data-label="${headers[index]}">${cell}</td>`).join("")}</tr>`).join("")}</tbody>
-    </table>
-  </div>`;
-}
-
-function renderContent(slide) {
-  const { content } = slide;
-
-  if (content.type === "cover") {
-    return `<div class="portfolio-slide-cover-layout">
-      <div>
-        <div class="portfolio-slide-keywords">${content.keywords.map((keyword) => `<span>${keyword}</span>`).join("")}</div>
-      </div>
-      <div class="portfolio-slide-metric-grid">
-        ${content.metrics.map((metric) => `<div class="portfolio-slide-metric"><strong>${metric.value}</strong><span>${metric.label}</span></div>`).join("")}
-      </div>
-    </div>`;
-  }
-
-  if (content.type === "cards") {
-    return renderCards(content.cards);
-  }
-
-  if (content.type === "dashboard") {
-    return renderDashboard(content);
-  }
-
-  if (content.type === "skillMap") {
-    return `<div class="portfolio-slide-skill-map">
-      ${content.areas
-        .map(
-          (area) => `<section class="portfolio-slide-skill-area">
-            <h3>${area.title}</h3>
-            <ul>${area.items.map((item) => `<li>${item}</li>`).join("")}</ul>
-          </section>`
-        )
-        .join("")}
-    </div>`;
-  }
-
-  if (content.type === "flow") {
-    return renderFlow(content.steps, content.highlight);
-  }
-
-  if (content.type === "paar") {
-    return renderPaar(content);
-  }
-
-  if (content.type === "kpiTable") {
-    return `<div class="portfolio-slide-kpi-grid">
-      ${content.kpis.map((kpi) => `<div class="portfolio-slide-kpi"><strong>${kpi.value}</strong><span>${kpi.label}</span></div>`).join("")}
-    </div>
-    ${renderTable(content.headers, content.rows)}`;
-  }
-
-  if (content.type === "integration") {
-    return `${renderCards(content.cards)}
-    <div class="portfolio-slide-compact-flow">${content.steps.map((step) => `<span>${step}</span>`).join("")}</div>`;
-  }
-
-  if (content.type === "process") {
-    return `<ol class="portfolio-slide-process">
-      ${content.steps.map((step, index) => `<li><span>${pad(index + 1)}</span><strong>${step}</strong></li>`).join("")}
-    </ol>`;
-  }
-
-  if (content.type === "featureTable") {
-    return `<div class="portfolio-slide-two-column">
-      <div class="portfolio-slide-feature-panel">
-        <h3>운영 기능 범위</h3>
-        <div class="portfolio-slide-feature-list">${content.features.map((feature) => `<span>${feature}</span>`).join("")}</div>
-      </div>
-      ${renderTable(content.headers, content.rows)}
-    </div>`;
-  }
-
-  if (content.type === "closing") {
-    return `<div class="portfolio-slide-closing-grid">
-      ${content.cards.map((card) => `<div class="portfolio-slide-strength-card">${card}</div>`).join("")}
-    </div>
-    <p class="portfolio-slide-closing-message">${(Array.isArray(content.message) ? content.message : [content.message]).map((line) => `<span>${line}</span>`).join("")}</p>`;
-  }
-
-  if (content.type === "aiTools") {
-    return `<div class="portfolio-slide-ai-layout">
-      <div class="portfolio-slide-ai-card-grid">
-        ${content.cards
-          .map(
-            (card) => `<section class="portfolio-slide-ai-card">
-              <h3>${card.title}</h3>
-              <p>${card.text}</p>
-              <div class="portfolio-slide-tags">${card.tags.map((tag) => `<span>${tag}</span>`).join("")}</div>
-            </section>`
-          )
-          .join("")}
-      </div>
-      <div class="portfolio-slide-ai-workflow">
-        ${content.workflow.map((step, index) => `<span data-step="${pad(index + 1)}">${step}</span>`).join("")}
-      </div>
-    </div>`;
-  }
-
-  if (content.type === "thanks") {
-    return `<div class="portfolio-slide-thanks-layout">
-      <p class="portfolio-slide-thanks-message">${content.message.map((line) => `<span>${line}</span>`).join("")}</p>
-      <div class="portfolio-slide-keywords">${content.keywords.map((keyword) => `<span>${keyword}</span>`).join("")}</div>
-    </div>`;
-  }
-
-  return "";
-}
-
-function renderDots() {
-  dotsEl.innerHTML = slides
-    .map(
-      (_, index) => `<button class="portfolio-slide-dot" type="button" aria-label="${index + 1}번 슬라이드로 이동" data-index="${index}"></button>`
-    )
-    .join("");
-
-  dotsEl.addEventListener("click", (event) => {
-    const button = event.target.closest("button[data-index]");
-    if (!button) return;
-    currentIndex = Number(button.dataset.index);
-    renderSlide();
-  });
-}
-
-function renderSlide() {
+function renderSlide({ focus = false } = {}) {
   const slide = slides[currentIndex];
   slideEl.className = `portfolio-slide-card portfolio-slide-${slide.variant || "default"}`;
-  slideEl.innerHTML = `
-    <header class="portfolio-slide-header">
-      <div class="portfolio-slide-chapter">${slide.chapter}</div>
-      <div>
-        ${slide.role ? `<span class="portfolio-slide-role">${slide.role}</span>` : ""}
-        <h1>${slide.title}</h1>
-        ${slide.name ? `<span class="portfolio-slide-name">${slide.name}</span>` : ""}
-        <p>${slide.subtitle}</p>
-      </div>
-    </header>
-    <div class="portfolio-slide-body">${renderContent(slide)}</div>
-    <footer class="portfolio-slide-footer">
-      <span>${pad(currentIndex + 1)} / ${pad(slides.length)}</span>
-      <span>${slide.label}</span>
-    </footer>
-  `;
-
+  slideEl.innerHTML = slideMarkup(slide, currentIndex);
   currentSlideEl.textContent = pad(currentIndex + 1);
   totalSlidesEl.textContent = pad(slides.length);
   prevButton.disabled = currentIndex === 0;
   nextButton.disabled = currentIndex === slides.length - 1;
-
-  document.querySelectorAll(".portfolio-slide-dot").forEach((dot, index) => {
+  sectionSelect.value = slide.id;
+  document.title = `${slide.title.replace(/\n/g, " ")} | 송다원`;
+  dotsEl.querySelectorAll("button").forEach((dot, index) => {
     dot.classList.toggle("is-active", index === currentIndex);
-    dot.setAttribute("aria-current", index === currentIndex ? "true" : "false");
+    if (index === currentIndex) dot.setAttribute("aria-current", "step");
+    else dot.removeAttribute("aria-current");
   });
-}
-
-function goToNextSlide() {
-  if (currentIndex < slides.length - 1) {
-    currentIndex += 1;
-    renderSlide();
+  if (focus) {
+    slideEl.focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: "instant" });
   }
 }
 
-function goToPrevSlide() {
-  if (currentIndex > 0) {
-    currentIndex -= 1;
-    renderSlide();
-  }
+function navigate(index, focus = true) {
+  if (index < 0 || index >= slides.length || index === currentIndex) return;
+  currentIndex = index;
+  // replaceState preserves a single browser history entry while supporting shareable sections.
+  window.history.replaceState(null, "", `#${slides[index].id}`);
+  renderSlide({ focus });
 }
 
-prevButton.addEventListener("click", goToPrevSlide);
-nextButton.addEventListener("click", goToNextSlide);
-
+sectionSelect.innerHTML = slides.map((slide, index) => `<option value="${slide.id}">${pad(index + 1)} · ${escapeHTML(slide.title.replace(/\n/g, " "))}</option>`).join("");
+dotsEl.innerHTML = slides.map((slide, index) => `<button class="portfolio-slide-dot" type="button" aria-label="${index + 1}. ${escapeHTML(slide.title.replace(/\n/g, " "))}" data-index="${index}"><span aria-hidden="true"></span></button>`).join("");
+prevButton.addEventListener("click", () => navigate(currentIndex - 1));
+nextButton.addEventListener("click", () => navigate(currentIndex + 1));
+sectionSelect.addEventListener("change", () => navigate(slides.findIndex((slide) => slide.id === sectionSelect.value), false));
+dotsEl.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-index]");
+  if (button) navigate(Number(button.dataset.index));
+});
+document.addEventListener("click", (event) => {
+  const link = event.target.closest('a[href^="#"]');
+  if (!link) return;
+  const index = slides.findIndex((slide) => `#${slide.id}` === link.getAttribute("href"));
+  if (index >= 0) { event.preventDefault(); navigate(index); }
+});
+window.addEventListener("hashchange", () => {
+  const index = getHashIndex();
+  if (index >= 0 && index !== currentIndex) { currentIndex = index; renderSlide({ focus: true }); }
+});
 window.addEventListener("keydown", (event) => {
-  if (event.key === "ArrowRight") goToNextSlide();
-  if (event.key === "ArrowLeft") goToPrevSlide();
+  if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.defaultPrevented) return;
+  if (event.target.closest("input, textarea, select, button, a, summary, [contenteditable]")) return;
+  if (window.getSelection()?.toString()) return;
+  if (event.key === "ArrowRight") { event.preventDefault(); navigate(currentIndex + 1); }
+  if (event.key === "ArrowLeft") { event.preventDefault(); navigate(currentIndex - 1); }
 });
 
-window.addEventListener(
-  "wheel",
-  (event) => {
-    const isVerticalIntent = Math.abs(event.deltaY) > Math.abs(event.deltaX);
-    if (!isVerticalIntent || Math.abs(event.deltaY) < 24 || isWheelLocked) return;
-
-    event.preventDefault();
-    isWheelLocked = true;
-
-    if (event.deltaY > 0) {
-      goToNextSlide();
-    } else {
-      goToPrevSlide();
-    }
-
-    window.setTimeout(() => {
-      isWheelLocked = false;
-    }, 760);
-  },
-  { passive: false }
-);
-
-renderDots();
+function preparePrint() {
+  document.querySelector("#printContent").innerHTML = slides.map((slide, index) => `<article class="print-slide">${slideMarkup(slide, index, true)}</article>`).join("");
+}
+window.addEventListener("beforeprint", preparePrint);
+document.querySelector("#printPortfolio").addEventListener("click", () => { preparePrint(); window.print(); });
 renderSlide();

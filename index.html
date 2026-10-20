@@ -3,32 +3,41 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Java Backend Developer Portfolio</title>
+    <meta name="theme-color" content="#111827" />
+    <meta name="description" content="Java 백엔드 개발자 송다원의 포트폴리오. 심리검사 응답 관리, 커리어넷 API, KG이니시스 결제, 소셜 로그인과 리포트 연동 경험을 소개합니다." />
+    <title>송다원 | Java Backend Developer</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="portfolio-slide-app" aria-label="Java Backend Developer Portfolio">
-      <section class="portfolio-slide-stage" aria-live="polite">
-        <article id="slide" class="portfolio-slide-card"></article>
+    <a class="skip-link" href="#slide">본문으로 이동</a>
+    <main class="portfolio-slide-app" aria-label="송다원 개발 포트폴리오">
+      <nav class="portfolio-toolbar" aria-label="포트폴리오 목차">
+        <a class="portfolio-brand" href="#cover">송다원 <span>Java Backend Developer</span></a>
+        <div class="portfolio-toolbar-actions">
+          <label class="sr-only" for="sectionSelect">목차에서 선택</label>
+          <select id="sectionSelect"></select>
+          <button id="printPortfolio" class="text-button" type="button">전체 인쇄</button>
+        </div>
+      </nav>
+      <section class="portfolio-slide-stage" aria-label="선택한 포트폴리오 항목">
+        <article id="slide" class="portfolio-slide-card" tabindex="-1"></article>
       </section>
-
       <nav class="portfolio-slide-controls" aria-label="슬라이드 이동">
         <button id="prevSlide" class="portfolio-slide-nav-button" type="button" aria-label="이전 슬라이드">
-          <span aria-hidden="true">‹</span>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>
         </button>
-        <div class="portfolio-slide-status" aria-label="현재 슬라이드">
-          <strong id="currentSlide">01</strong>
-          <span>/</span>
-          <span id="totalSlides">10</span>
+        <div class="portfolio-slide-status" role="status" aria-live="polite" aria-atomic="true">
+          <span class="sr-only">현재 슬라이드 </span><strong id="currentSlide">01</strong><span aria-hidden="true">/</span><span class="sr-only">전체 </span><span id="totalSlides"></span>
         </div>
         <button id="nextSlide" class="portfolio-slide-nav-button" type="button" aria-label="다음 슬라이드">
-          <span aria-hidden="true">›</span>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg>
         </button>
       </nav>
-
-      <div id="slideDots" class="portfolio-slide-dots" aria-label="슬라이드 진행 표시"></div>
+      <p class="navigation-hint">목차 · 좌우 방향키로 이동 / 스크롤로 본문 읽기</p>
+      <nav id="slideDots" class="portfolio-slide-dots" aria-label="빠른 슬라이드 이동"></nav>
+      <section id="printContent" class="print-content" aria-label="전체 포트폴리오"></section>
+      <noscript><p class="noscript-message">슬라이드를 보려면 JavaScript를 활성화해 주세요.</p></noscript>
     </main>
-
     <script src="slides.js"></script>
   </body>
 </html>
